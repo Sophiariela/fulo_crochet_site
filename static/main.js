@@ -1,4 +1,3 @@
-static/js/main.js
 document.addEventListener('DOMContentLoaded', function () {
     const filtros = document.querySelectorAll('.filtro-btn');
     const cards = document.querySelectorAll('.card');
