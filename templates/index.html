@@ -1,71 +1,74 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fulô | Crochê Artesanal</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fulô | Crochê Artesanal</title>
+    <meta name="description" content="Do barro, pela mão, pra você.">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<header class="header">
-    <div class="banner">
-        <img src="{{ url_for('static', filename='images/banner.png') }}" alt="Fulô Crochet Artesanal" class="banner-img">
-    </div>
-    <div class"header-whatsapp">
-        <a href="https://wa.me/5571992714704?text=Olá! Gostaria de saber mais sobre as peças da Fulô 💚"
-           class="btn btn-primary"
-           target="_blank">
-            📱 Falar no WhatsApp
-        </a>
-    </div>
-</header>
+    <header class="header">
+        <div class="banner">
+            <img src="{{ url_for('static', filename='images/banner.png') }}" alt="Fulô Crochet Artesanal" class="banner-img">
+        </div>
+        <div class="header-bar">
+            <a href="https://wa.me/5571992714704?text=Olá! Gostaria de saber mais sobre as peças da fulô 💛"
+               class="btn btn-whatsapp" target="_blank" rel="noopener noreferrer">
+                📱 Falar no WhatsApp
+            </a>
+        </div>
+    </header>
 
-<section class="filtros">
-<div class="container">
-<button class="filtro-btn active" data-categoria="todos">Todos</button>
-<button class="filtro-btn" data-categoria="vestidos">Vestidos</button>
-<button class="filtro-btn" data-categoria="conjuntos">Conjuntos</button>
-<button class="filtro-btn" data-categoria="tops">Tops</button>
+    <section class="filtros">
+        <div class="container">
+            <button class="filtro-btn active" data-categoria="todos">Todos</button>
+            <button class="filtro-btn" data-categoria="vestidos">Vestidos</button>
+            <button class="filtro-btn" data-categoria="conjuntos">Conjuntos</button>
+            <button class="filtro-btn" data-categoria="tops">Tops</button>
+            <button class="filtro-btn" data-categoria="saias">Saias</button>
+            <button class="filtro-btn" data-categoria="acessorios">Acessórios</button>
+        </div>
+    </section>
 
-<section class="produtos">
-<div class="container">
-<div class="produtos-grid">
-{% for produto in produtos %}
-<div class="card" data-categoria="{{ produto.categoria }}">
-<div class="card-imagem">
-<img src="{{ produto.imagem }}" alt="{{ produto.nome }}">
-<div class="card-overlay">
-<span class="tag-categoria">{{ produto.categoria }}</span>
-</div>
-</div>
-<div class="card-conteudo">
-<h2 class="card-titulo">{{ produto.nome }}</h2>
-<p class="card-descricao">{{ produto.descricao }}</p>
-<p class="card-preco">R$ {{ "%.2f"|format(produto.preco) }}</p>
-<a href="https://wa.me/5571992714704?text=Ol%C3%A1!%20Me%20interessei%20no%20{{ produto.nome|urlencode }}%20(R%24%20{{ '%.2f'|format(produto.preco) }})%20%F0%9F%92%97"
-class="btn btn-secondary"
-target="_blank"
-rel="noopener noreferrer">
-Comprar
-</a>
-</div>
-</div>
-{% endfor %}
-</div>
-</div>
-</section>
+    <section class="produtos">
+        <div class="container">
+            <div class="produtos-grid">
+                {% for produto in produtos %}
+                <div class="card" data-categoria="{{ produto.categoria }}">
+                    <div class="card-imagem">
+                        <img src="{{ produto.imagem }}" alt="{{ produto.nome }}" loading="lazy">
+                        <div class="card-overlay">
+                            <span class="tag-categoria">{{ produto.categoria }}</span>
+                        </div>
+                    </div>
+                    <div class="card-conteudo">
+                        <h2 class="card-titulo">{{ produto.nome }}</h2>
+                        <p class="card-descricao">{{ produto.descricao }}</p>
+                        <p class="card-preco">R$ {{ "%.2f"|format(produto.preco) }}</p>
+                        <a href="https://wa.me/5571992714704?text=Olá! Me interessei no {{ produto.nome }} (R$ {{ '%.2f'|format(produto.preco) }}) 💗"
+                           class="btn btn-comprar" target="_blank" rel="noopener noreferrer">
+                            🛍️ Quero essa peça
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
 
-<footer class="footer">
-<div class="container">
-<p>&copy; 2023 Fulô | Crochê Artesanal | Direitos Autorais Reservados.</p>
-</div>
-</footer>
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-logo">fulô</p>
+            <p>Crochê Artesanal </p>
+            <p class="footer-credit">Por Jhennyfer Arcanjo</p>
+        </div>
+    </footer>
 
-<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
