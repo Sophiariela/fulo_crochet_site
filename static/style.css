@@ -19,7 +19,7 @@ body { font-family: 'Poppins', sans-serif; background: var(--bege); color: var(-
 
 .header { position: relative; line-height: 0; box-shadow: var(--sombra); }
 .banner-img { width: 100%; display: block; object-fit: cover; height: 220px; }
-.banner-btn-wrap { position: absolute; bottom: 18px; right: 24px; text-align: right; }
+.banner-btn-wrap { position: absolute; bottom: 18px; left; 50%; transform; translatex(-50); text- align: center; }
 .btn-whatsapp { display: inline-flex; align-items: center; gap: 8px; padding: 11px 26px; text-decoration: none; border-radius: 50px; font-weight: 600; font-family: 'Poppins', sans-serif; font-size: 0.88rem; background: var(--bege); color: var(--marrom-escuro); box-shadow: 0 3px 16px rgba(58,31,13,0.30); transition: all 0.3s ease; border: 2px solid rgba(245,237,224,0.6); white-space: nowrap; }
 .btn-whatsapp:hover { background: var(--branco); transform: translateY(-2px); box-shadow: 0 6px 22px rgba(58,31,13,0.35); }
 
