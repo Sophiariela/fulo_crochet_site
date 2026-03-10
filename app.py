@@ -7,7 +7,7 @@ PRODUTOS = [
         "id": 1,
         "nome": "Vestido Bahia Blue",
         "preco": 90.00,
-        "descricao": "Vestido em crochê de halter neck confeccionado em fio azul royal vibrante. Com acabamento em babados na barra.",
+        "descricao": "Para quem quer chegar e já ser o centro das atenções. O Bahia Blue é feito à mão em crochê com fio azul royal vibrante, silhueta halter neck que valoriza o decote e babados na barra que garantem movimento a cada passo. Perfeito para festas na praia, baladas ou para onde você queira se sentir poderosa.",
         "imagem": "https://drive.google.com/thumbnail?id=1MLL3YjLFlP8EsQ-mR9-nQq0kf8iNn1Pg&sz=w1000",
         "categoria": "vestidos"
     },
@@ -15,7 +15,7 @@ PRODUTOS = [
         "id": 2,
         "nome": "Vestido Barra Coral",
         "preco": 110.00,
-        "descricao": "Vestido tomara que caia com twist frontal e recortes estratégicos nas laterais, em tom coral rosado. Inspirado nas cores vibrantes do Caribe.",
+        "descricao": "O Caribe em cada fio. O Barra Coral tem twist frontal que cria volume no colo e recortes laterais que mostram na medida certa. Um vestido que pede sol, margarita e boa música vestindo sua melhor noite de verão.",
         "imagem": "https://drive.google.com/thumbnail?id=1mpCBdACvpZmz9HE4YgGIrEfIrqQe9Olg&sz=w1000",
         "categoria": "vestidos"
     },
@@ -23,7 +23,7 @@ PRODUTOS = [
         "id": 3,
         "nome": "Conjunto Pôr do Sol Tropical",
         "preco": 80.00,
-        "descricao": "Conjunto de duas peças em crochê off-white com aplicações de conchas douradas. O top bandeau apresenta comprimento cropped.",
+        "descricao": "Delicado e sofisticado ao mesmo tempo. O Pôr do Sol Tropical é um conjunto de duas peças em crochê off-white com detalhes em conchas douradas que capturam a luz. ",
         "imagem": "https://drive.google.com/thumbnail?id=1pSxl53vvtaBd4Czn1_rJvFsPDopsgDNj&sz=w1000",
         "categoria": "conjuntos"
     },
@@ -31,7 +31,7 @@ PRODUTOS = [
         "id": 4,
         "nome": "Vestido Areia Dourada",
         "preco": 179.99,
-        "descricao": "Vestido elegante em tons de areia com detalhes sofisticados.",
+        "descricao": "Feito para quem ama um visual natural e cheio de textura. O Areia Dourada tem aquele tom de areia molhada que combina com tudo — pele bronzeada, sandália dourada, fim de tarde. O crochê artesanal garante que nenhuma peça é igual à outra.",
         "imagem": "https://drive.google.com/thumbnail?id=1Bz2d_SlRsQQqAHD712JmOYTXSNJ82N6t&sz=w1000",
         "categoria": "vestidos"
     },
@@ -39,7 +39,7 @@ PRODUTOS = [
         "id": 5,
         "nome": "Conjunto Maré Alta",
         "preco": 85.00,
-        "descricao": "Conjunto versátil de duas peças em crochê, perfeito para um dia na praia ou passeio à beira-mar.",
+        "descricao": "Duas peças, infinitas combinações. O Maré Alta tem franjas que balançam com o vento e caimento que valoriza o corpo em movimento. Use o top com jeans para um jantar casual, ou o conjunto completo para arrasar na orla. É aquela peça que você vai querer usar até desgastar.",
         "imagem": "https://drive.google.com/thumbnail?id=1Iy6g9-K4C_JP1Y46tEtqucZsOZaJKDsw&sz=w1000",
         "categoria": "conjuntos"
     },
@@ -47,7 +47,7 @@ PRODUTOS = [
         "id": 6,
         "nome": "Vestido Estrela do Mar",
         "preco": 120.00,
-        "descricao": "Vestido delicado em crochê com detalhes que remetem às estrelas do mar, ideal para ocasiões especiais.",
+        "descricao": "Um vestido que conta uma história. O Estrela do Mar tem estrelinhas bordadas à mão em tons de rosa e azul sobre crochê off-white — cada detalhe feito com cuidado e intenção. Para se sentir única onde quer que esteja.",
         "imagem": "https://drive.google.com/thumbnail?id=1Myf3qW6BobigvUvpa7vVJM1tUA25HWUF&sz=w1000",
         "categoria": "vestidos"
     }
