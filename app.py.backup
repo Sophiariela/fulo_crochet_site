@@ -8,7 +8,7 @@ PRODUTOS = [
         "nome": "Vestido Bahia Blue",
         "preco": 200.00,
         "descricao": "Vestido halter neck em crochê artesanal, linha 100% algodão azul royal vibrante. Amarração no pescoço, cintura marcada, barra com babado em ponto pipoca. Comprimento mini, trama fechada. Forro opcional.",
-        "imagem": "/static/imagens/vestido-croche-halter-azul-royal.jpg",
+        "imagem": "/static/imagens/vestido-bahia-blue.jpg",
         "categoria": "vestidos"
     },
     {
@@ -16,7 +16,7 @@ PRODUTOS = [
         "nome": "Conjunto Flor de Maio",
         "preco": 190.00,
         "descricao": "Conjunto composto por top e saia mini em crochê artesanal, linha 100% algodão off-white com detalhes vinho/rosa/. Top com aplicação de orquídea e tiras reguláveis. Saia com cordão, miçangas vermelhas e babado. Disponível separadamente ou conjunto.",
-        "imagem": "/static/imagens/conjunto-croche-top-saia-offwhite-floral.png",
+        "imagem": "/static/imagens/conjunto-flor-de-maio.png",
         "categoria": "conjuntos"
     },
     {
@@ -24,7 +24,7 @@ PRODUTOS = [
         "nome": "Vestido Nevoa",
         "preco": 300.00,
         "descricao": "Vestido curto em crochê artesanal, linha 100% algodão off-white. Halter neck com costas abertas, babado na barra. Trama aberta estilo beach/festival, comprimento mini. Forro opcional.",
-        "imagem": "/static/imagens/vestido-croche-halter-costas-abertas-offwhite.png",
+        "imagem": "/static/imagens/vestido-nevoa.png",
         "categoria": "vestidos"
     },
     {
@@ -32,7 +32,7 @@ PRODUTOS = [
         "nome": "Vestido Areia Dourada",
         "preco": 300.00,
         "descricao": "Vestido assimétrico ombro único em crochê artesanal, linha 100% algodão off-white. Alça larga com detalhe vazado lateral, faixa floral assimétrica. Comprimento médio, barra assimétrica. Trama aberta estilo beach. Forro opcional.",
-        "imagem": "/static/imagens/vestido-croche-ombro-unico-assimetrico-offwhite.png",
+        "imagem": "/static/imagens/vestido-areia-dourada.png",
         "categoria": "vestidos"
     },
     {
@@ -40,7 +40,7 @@ PRODUTOS = [
         "nome": "Top Terra Preta",
         "preco": 70.00,
         "descricao": "Top triangular halter neck em crochê artesanal, 100% poliamida na cor chocolate/marrom. Amarração no pescoço e costas, aplicações florais com miçangas em tons terrosos. Tiras reguláveis com miçangas de madeira.",
-        "imagem": "/static/imagens/top-croche-halter-chocolate-floral-micanga.png",
+        "imagem": "/static/imagens/top-terra-preta.png",
         "categoria": "tops"
     },
     {
@@ -49,7 +49,7 @@ PRODUTOS = [
 	"nome": "Top Orquídea",
 	"preco": 90.00,
 	"descricao": "Top em crochê artesanal, linha 100% algodão off-white com aplicação de orquídea multicolorida (vinho, rosa). Amarração no pescoço e costas, tiras reguláveis com miçangas. Trama aberta estilo beach/festival.",
-	"imagem": "/static/imagens/top-croche-halter-offwhite-aplicacao-orquidea.png",
+	"imagem": "/static/imagens/top-orquidea.png",
 	"categoria": "tops"
 
    },
@@ -58,7 +58,7 @@ PRODUTOS = [
 	"nome": "Saia Piteira",
 	"preco": 100.00,
 	"descricao": "Saia mini em crochê artesanal, linha 100% algodão off-white. Cintura alta com cordão regulável e miçangas vermelhas, barra com babado em ponto leque. Elástico interno para melhor ajuste.",
-	"imagem": "/static/imagens/saia-croche-mini-cintura-alta-offwhite.png",
+	"imagem": "/static/imagens/saia-piteira.png",
 	"categoria": "saias & shorts"
 
     },
@@ -67,7 +67,7 @@ PRODUTOS = [
         "nome": "Vestido Estrela do Mar",
         "preco": 270.00,
         "descricao": "Vestido em crochê artesanal, linha 100% algodão branca com aplicações de estrelas-do-mar coloridas (azul, rosa, dourado). Alças finas, barra com babado rosa em ponto leque. Cintura marcada, trama vazada. Forro opcional.",
-	"imagem": "/static/imagens/vestido-croche-alca-fina-branco-aplicacao.png",
+	"imagem": "/static/imagens/vestido-estrela-do-mar.png",
         "categoria": "vestidos"
     },
     {
@@ -75,7 +75,7 @@ PRODUTOS = [
         "nome": "Conjunto Noite Selvagem",
         "preco": 260.00,
         "descricao": "Conjunto em crochê artesanal, linha 100% algodão cru com bordado de onça pintada. Top tomara-que-caia com franjas pingentes na barra. Saia midi em ponto rendado escuro, acabamento em franjas longas. Cintura marcada, sobreposição estruturada.",
-        "imagem": "/static/imagens/conjunto-croche-top-saia-midi-franja.png",
+        "imagem": "/static/imagens/conjunto-noite-selvagem.png",
         "categoria": "conjuntos"
     },
     {
@@ -84,7 +84,7 @@ PRODUTOS = [
         "nome": "Conjunto Liana",
         "preco": 300.00,
         "descricao": "Conjunto em crochê artesanal, linha 100% algodão bicolor — top marrom com decote em V e franjas douradas, saia bege em ponto canelado com franjas longas e cinto trançado. Silhueta fluida, acabamento assimétrico. Forro opcional.",
-        "imagem": "/static/imagens/conjunto-croche-bicolor-franja-dourada.jpg",
+        "imagem": "/static/imagens/conjunto-liana.jpg",
 	"categoria": "conjuntos"
     },
     {
@@ -100,7 +100,7 @@ PRODUTOS = [
         "nome": "Vestido Jabutuicaba",
         "preco": 280.00,
 	"descricao": "Vestido em crochê artesanal, linha 100% algodão vinho escuro. Alças finas com pingentes dourados, decote em V, trama vazada no corpo. Barra com babado em ponto leque, volume leve. Forro opcional.",
-        "imagem": "/static/imagens/vestido-croche-decote-v-vinho-babado.png",
+        "imagem": "/static/imagens/vestido-jabuticaba.png",
 	"categoria": "vestidos"
     },
     {
@@ -108,7 +108,7 @@ PRODUTOS = [
 	"nome": "Vestido Sol do Tapajós",
 	"preco": 220.00,
 	"descricao": "Vestido em crochê artesanal, linha 100% algodão cru. Alças finas com pingentes dourados, decote em V, trama rendada ao longo do corpo. Barra com babado assimétrico em ponto leque. Forro opcional.",
-	"imagem": "/static/imagens/vestido-croche-rendado-algodao-cru.jpg",
+	"imagem": "/static/imagens/vestido-sol-do-tapajos.jpg",
 	"categoria": "vestidos"
     },
     {
@@ -116,7 +116,7 @@ PRODUTOS = [
 	"nome": "Top Arara",
 	"preco": 120.00,
 	"descricao": "Top tomara-que-caia em crochê artesanal, linha 100% algodão cru com bordado de arara-azul em ponto tapeçaria — azul, amarelo e verde. Estrutura tubular, barra reta. Peça única.",
-	"imagem": "/static/imagens/top-croche-tomara-caia-bordado-arara.png",
+	"imagem": "/static/imagens/top-arara.png",
 	"categoria": "tops"
     },
     {
@@ -124,7 +124,7 @@ PRODUTOS = [
 	"nome": "Top Pôr do Amazônas",
 	"preco": 50.00,
 	"descricao": "Top em crochê artesanal, linha 100% algodão laranja queimado. Modelo triângulo com alças reguláveis, acabamento em ponto rendado nas bordas e pingentes em miçanga dourada. Ajuste por amarração.",
-	"imagem": "/static/imagens/top-croche-triangulo-laranja-micanga.png",
+	"imagem": "/static/imagens/top-por-do-amazonas.png",
 	"categoria": "tops"
     },
     {
@@ -132,7 +132,7 @@ PRODUTOS = [
 	"nome": "Top Cacau",
 	"preco": 50.00,
 	"descricao": "Top em crochê artesanal, linha 100% algodão marrom. Modelo triângulo com alças reguláveis em tiras, acabamento em ponto rendado na borda. Ajuste por amarração frontal e nas costas.",
-	"imagem": "/static/imagens/top-croche-triangulo-marrom-rendado.png",
+	"imagem": "/static/imagens/top-cacau.png",
 	"categoria": "tops"
     },
     {
@@ -140,7 +140,7 @@ PRODUTOS = [
 	"nome": "Top Cocada",
 	"preco": 100.00,
 	"descricao": "Top colete em crochê artesanal, linha 100% algodão cru. Modelo halter com abertura frontal e pingente em miçanga dourada. Trama semi-aberta, caimento leve.",
-	"imagem": "/static/imagens/top-croche-colete-halter-algodao-cru.png",
+	"imagem": "/static/imagens/top-cocada.png",
 	"categoria": "tops"
     },
     {
@@ -148,7 +148,7 @@ PRODUTOS = [
 	"nome": "Top Flor de Orquídea",
 	"preco": 90.00,
 	"descricao": "Top em crochê artesanal, linha 100% algodão branco com aplicação de orquídea em relevo e acabamento em miçangas pretas. Modelo halter com alça de contas, decote amplo.",
-	"imagem": "/static/imagens/top-croche-halter-branco-aplicacao-floral.png",
+	"imagem": "/static/imagens/top-flor-de-orquidea.png",
 	"categoria": "tops"
     },
     {
@@ -156,7 +156,7 @@ PRODUTOS = [
 	"nome": "Top Raíz Brasileira",
 	"preco": 70.00,
 	"descricao": "Top em crochê artesanal, linha 100% algodão verde com detalhes nas cores da bandeira brasileira na barra. Modelo cropped com recorte geométrico frontal. Alça única regulável.",
-	"imagem": "/static/imagens/top-croche-cropped-verde-brasil.png",
+	"imagem": "/static/imagens/top-raiz-brasileira.png",
 	"categoria": "tops"
     },
     {
@@ -164,7 +164,7 @@ PRODUTOS = [
 	"nome": "Bolsa Buriti",
 	"preco": 100.00,
 	"descricao": "Bolsa em crochê artesanal, linha 100% algodão marrom. Modelo meia-lua com alça rígida em miçangas de madeira laranja. Trama fechada estruturada, abertura superior.",
-	"imagem": "/static/imagens/bolsa-croche-meia-lua-madeira-marrom.jpg",
+	"imagem": "/static/imagens/bolsa-buriti.jpg",
 	"categoria": "acessorios"
     },
     {
@@ -172,7 +172,7 @@ PRODUTOS = [
 	"nome": "Bandana Folha Amazonica",
 	"preco": 70.00,
 	"descricao": "Bandana em crochê artesanal, linha 100% algodão verde. Formato aba larga com amarração em cordão fino. Trama semi-aberta, leve e ventilada. Ajuste por amarração.",
-	"imagem": "static/imagens/bandana-croche-verde-algodao-artesanal.png",
+	"imagem": "static/imagens/bandana-folha-amazonica.png",
 	"categoria": "acessorios"
     },
     {
@@ -180,7 +180,7 @@ PRODUTOS = [
         "nome": "Top Sereia Azul",
         "preco": 75.00,
 	"descricao": "Top triângulo em crochê artesanal, fio de polipropileno azul royal com aplicação de paetês circulares. Amarração frontal ajustável com pingentes nas pontas. Efeito escama que valoriza o decote.",
-        "imagem": "/static/imagens/top-croche-triangulo-azul-paetes.png",
+        "imagem": "/static/imagens/top-sereia-azul.png",
         "categoria": "tops"
     },
     {
@@ -188,7 +188,7 @@ PRODUTOS = [
         "nome": "Top Ouro de Midas",
         "preco": 75.00,
 	"descricao": "Top triângulo em crochê artesanal, fio de polipropileno com aplicação de paetês dourados. Amarração frontal ajustável, acabamento com pingentes nas pontas. Efeito metálico exclusivo.",
-        "imagem": "/static/imagens/top-croche-triangulo-dourado-paetes.png",
+        "imagem": "/static/imagens/top-ouro-de-midas.pgn",
         "categoria": "tops"
     },
     {
@@ -196,7 +196,7 @@ PRODUTOS = [
         "nome": "Top Lua Cheia",
         "preco": 85.00,
 	"descricao": "Top triângulo assimétrico em crochê artesanal, linha 100% algodão off white. Aplicação de argolas e moedas que acompanham o movimento do corpo. Amarração ajustável no pescoço.",
-        "imagem": "/static/imagens/top-croche-triangulo-offwhite-argolas.png",
+        "imagem": "/static/imagens/top-lua-cheia.png",
         "categoria": "tops"
     },
     {
@@ -204,7 +204,7 @@ PRODUTOS = [
         "nome": "Top Ondas do Caribe",
         "preco": 85.00,
 	"descricao": "Top triângulo em crochê artesanal, fio de polipropileno azul. Modelagem assimétrica com trama aberta e alça única ajustável.",
-        "imagem": "/static/imagens/top-croche-triangulo-azul-assimetrico.png",
+        "imagem": "/static/imagens/top-ondas-do-caribe.png",
         "categoria": "tops"
     },
     {
@@ -212,7 +212,7 @@ PRODUTOS = [
         "nome": "Top Noite Estrelada",
         "preco": 85.00,
 	"descricao": "Top triângulo em crochê artesanal, fio de polipropileno preto. Modelagem assimétrica com trama aberta e alça única ajustável.",
-        "imagem": "/static/imagens/top-croche-triangulo-preto-trama-aberta.png",
+        "imagem": "/static/imagens/top-noite-estrelada.png",
         "categoria": "tops"
     },
     {
@@ -220,7 +220,7 @@ PRODUTOS = [
         "nome": "Top Galaxia Profunda",
         "preco": 85.00,
 	"descricao": "Top triângulo em crochê artesanal, fio de polipropileno preto. Modelagem assimétrica com trama aberta e alça única ajustável.",
-        "imagem": "/static/imagens/top-croche-triangulo-preto-alca-unica.png",
+        "imagem": "/static/imagens/top-galaxia-profunda.png",
         "categoria": "tops"
     },
     {
@@ -228,7 +228,7 @@ PRODUTOS = [
         "nome": "Biquini Rainha Negra",
         "preco": 120.00,
 	"descricao": "Conjunto biquíni em crochê artesanal, fio de polipropileno preto. Top bandeau com aplicação de miçangas e calcinha com correntes douradas ajustáveis.",
-        "imagem": "/static/imagens/biquini-croche-preto-micanga-corrente.png",
+        "imagem": "/static/imagens/biquini-rainha-negra.png",
         "categoria": "biquinis"
     },
     {
@@ -236,7 +236,7 @@ PRODUTOS = [
         "nome": "Biquini Céu de Verão",
         "preco": 120.00,
 	"descricao": "Conjunto biquíni em crochê artesanal, fio de polipropileno azul claro. Top triângulo com amarração no pescoço e nas costas, calcinha com amarração lateral. Trama delicada em ponto renda",
-        "imagem": "/static/imagens/biquini-croche-triangulo-azul-rendado.png",
+        "imagem": "/static/imagens/biquini-ceu-de-verao.png",
         "categoria": "biquinis"
     },
     {
@@ -244,7 +244,7 @@ PRODUTOS = [
         "nome": "Biquini Nevoa de Prata",
         "preco": 120.00,
 	"descricao": "Conjunto biquíni em crochê artesanal, fio de polipropileno prata. Top triângulo com acabamento em miçangas, calcinha com amarração lateral. Efeito metálico sutil e delicado.",
-        "imagem": "/static/imagens/biquini-croche-prata-metalico-micanga.png",
+        "imagem": "/static/imagens/biquini-nevoa-de-prata.png",
         "categoria": "biquinis"
     },
     {
@@ -252,7 +252,7 @@ PRODUTOS = [
         "nome": "Biquini Ipanema Gold",
         "preco": 120.00,
 	"descricao": "Conjunto biquíni em crochê artesanal, fio de polipropileno com listras preto e dourado. Top triângulo com argolas douradas centrais e calcinha de amarração lateral.",
-        "imagem": "/static/imagens/biquini-croche-preto-dourado-argola.png",
+        "imagem": "/static/imagens/biquini-ipanema-gold.png",
         "categoria": "biquinis"
     },
     {
@@ -260,7 +260,7 @@ PRODUTOS = [
         "nome": "Conjunto Moça Baiana",
         "preco": 120.00,
 	"descricao": "Conjunto em crochê artesanal, fio de polipropileno multicolor. Top triângulo com amarração ajustável e sainha de cintura alta com listras vibrantes.",
-        "imagem": "/static/imagens/conjunto-croche-top-saia-multicolor.png",
+        "imagem": "/static/imagens/conjunto-moca-baiana.png",
         "categoria": "conjuntos"
     },
     {
@@ -268,7 +268,7 @@ PRODUTOS = [
         "nome": "Conjunto Nevoa",
         "preco": 200.00,
 	"descricao": "Conjunto em crochê artesanal, linha 100% algodão off white. Top com alça fina e amarração ajustável, sainha com cós elástico e barra com franjas. Trama aberta com volume leve e toque natural.",
-        "imagem": "/static/imagens/conjunto-croche-top-saia-franja-offwhite.png",
+        "imagem": "/static/imagens/conjunto-nevoa.png",
         "categoria": "conjuntos"
     },
     {
@@ -276,7 +276,7 @@ PRODUTOS = [
         "nome": "Vestido Brasileirinha",
         "preco": 270.00,
 	"descricao": "Vestido tomara-que-caia em crochê artesanal, fio de polipropileno multicolor com listras horizontais em amarelo, verde, azul e laranja. Modelagem tubinho com barra reta e caimento leve. Cor e movimento em cada detalhe.",
-        "imagem": "/static/imagens/vestido-croche-tomara-caia-multicolor.jpg",
+        "imagem": "/static/imagens/vestido-brasileirinha.jpg",
         "categoria": "vestidos"
  }
 ]
