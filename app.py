@@ -2,6 +2,9 @@ from flask import Flask, render_template
 import psycopg2
 
 app = Flask(__name__)
+app.secret_key = 'fulo_secret_2024'
+from admin import admin
+app.register_blueprint(admin)
 
 def get_produtos():
     conn = psycopg2.connect(
