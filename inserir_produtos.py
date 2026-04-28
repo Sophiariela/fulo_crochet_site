@@ -1,6 +1,6 @@
 import psycopg2
 
-conn = psycopg2.connect(dbname="fulo_db", user="fulo_user", password="", host="localhost")
+conn = psycopg2.connect("postgresql://fulo_db_user:uBnTaAWuT8V8nDZjIHEynM2VtaUx7PIx@dpg-d7ogqj9f9bms73dmv080-a.ohio-postgres.render.com/fulo_db")
 cur = conn.cursor()
 
 produtos = [

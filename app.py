@@ -1,24 +1,25 @@
+cat > ~/fulo/app.py << 'EOF'
 from flask import Flask, render_template
 import psycopg2
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = 'fulo_secret_2024'
 from admin import admin
 app.register_blueprint(admin)
 
+DATABASE_URL = os.getenv('DATABASE_URL')
+
 def get_produtos():
-    conn = psycopg2.connect(
-        dbname="fulo_db",
-        user="fulo_user",
-        password="",
-        host="localhost"
-    )
+    conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
     cur.execute("SELECT id, nome, preco, descricao, categoria, imagem FROM produtos ORDER BY id")
     rows = cur.fetchall()
     cur.close()
     conn.close()
-
     produtos = []
     for row in rows:
         produtos.append({
@@ -38,3 +39,4 @@ def index():
 
 if __name__ == '__main__':
     app.run(debug=True)
+EOF

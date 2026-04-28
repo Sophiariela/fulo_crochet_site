@@ -3,6 +3,8 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 import psycopg2
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
 admin = Blueprint('admin', __name__)
 
@@ -10,7 +12,7 @@ ADMIN_PASSWORD = generate_password_hash("fl_jnyfer")
 UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'static/imagens')
 
 def get_db():
-    return psycopg2.connect(dbname="fulo_db", user="fulo_user", password="", host="localhost")
+    return psycopg2.connect(os.getenv('DATABASE_URL'))
 
 def login_required(f):
     from functools import wraps
