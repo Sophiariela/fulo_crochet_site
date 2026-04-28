@@ -1,4 +1,3 @@
-cat > ~/fulo/app.py << 'EOF'
 from flask import Flask, render_template
 import psycopg2
 import os
@@ -39,4 +38,3 @@ def index():
 
 if __name__ == '__main__':
     app.run(debug=True)
-EOF
