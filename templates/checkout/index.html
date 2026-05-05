@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout | Fulô</title>
+    <style>
+        body { font-family: sans-serif; background: #f5f0eb; margin: 0; padding: 40px; }
+        .container { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: 1fr 350px; gap: 30px; }
+        .box { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        h2 { color: #3d2b1f; margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+        .address-option { border: 1px solid #ddd; padding: 15px; border-radius: 8px; margin-bottom: 15px; cursor: pointer; }
+        .address-option:hover { border-color: #3d2b1f; }
+        .address-option input { margin-right: 10px; }
+        .new-address input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        .summary-item { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem; }
+        .summary-total { border-top: 2px solid #3d2b1f; padding-top: 15px; margin-top: 15px; font-weight: bold; font-size: 1.2rem; }
+        .btn-pay { width: 100%; background: #3d2b1f; color: white; border: none; padding: 15px; border-radius: 8px; font-size: 1.1rem; cursor: pointer; margin-top: 20px; }
+        .product-mini { display: flex; justify-content: space-between; font-size: 0.9rem; color: #666; margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form action="{{ url_for('checkout.process') }}" method="POST" id="checkout-form">
+            <div class="box">
+                <h2>1. Endereço de Entrega</h2>
+                {% if addresses %}
+                    {% for addr in addresses %}
+                    <label class="address-option">
+                        <input type="radio" name="address_id" value="{{ addr.id }}" {% if loop.first %}checked{% endif %}>
+                        {{ addr.street }}, {{ addr.number }} - {{ addr.neighborhood }}, {{ addr.city }}/{{ addr.state }} ({{ addr.zip_code }})
+                    </label>
+                    {% endfor %}
+                    <div style="margin: 20px 0; border-top: 1px dashed #ccc; padding-top: 20px;">
+                        <p><strong>Ou use um novo endereço:</strong></p>
+                    </div>
+                {% endif %}
+
+                <div class="new-address">
+                    <input type="text" name="street" placeholder="Rua / Logradouro">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <input type="text" name="number" placeholder="Número">
+                        <input type="text" name="zip_code" placeholder="CEP">
+                    </div>
+                    <input type="text" name="neighborhood" placeholder="Bairro">
+                    <div style="display: grid; grid-template-columns: 1fr 100px; gap: 10px;">
+                        <input type="text" name="city" placeholder="Cidade">
+                        <input type="text" name="state" placeholder="UF">
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="box">
+            <h2>Resumo</h2>
+            <div style="margin-bottom: 20px;">
+                {% for item in items %}
+                <div class="product-mini">
+                    <span>{{ item.quantity }}x {{ item.name }}</span>
+                    <span>R$ {{ "%.2f"|format(item.subtotal) }}</span>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="summary-item">
+                <span>Subtotal</span>
+                <span>R$ {{ "%.2f"|format(subtotal) }}</span>
+            </div>
+            <div class="summary-item">
+                <span>Frete</span>
+                <span>R$ {{ "%.2f"|format(shipping_cost) }}</span>
+            </div>
+            <div class="summary-total summary-item">
+                <span>Total</span>
+                <span>R$ {{ "%.2f"|format(total) }}</span>
+            </div>
+
+            <button type="submit" form="checkout-form" class="btn-pay">Finalizar Pedido</button>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,58 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Produtos{% endblock %}
+
+{% block content %}
+<div class="header-actions">
+    <h2>Produtos</h2>
+    <a href="{{ url_for('admin.product_add') }}" class="btn btn-primary">Adicionar Novo</a>
+</div>
+
+<div class="card">
+    <table>
+        <thead>
+            <tr>
+                <th>Imagem</th>
+                <th>Nome</th>
+                <th>Categoria</th>
+                <th>Coleção</th>
+                <th>Preço</th>
+                <th>Estoque</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>
+                    <img src="{{ product.image_url }}" alt="" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
+                </td>
+                <td>
+                    <strong>{{ product.name }}</strong><br>
+                    <small style="color: var(--muted);">{{ product.subtitle or '' }}</small>
+                </td>
+                <td>{{ product.category_name }}</td>
+                <td>{{ product.collection or '-' }}</td>
+                <td>R$ {{ "%.2f"|format(product.price) }}</td>
+                <td>{{ product.stock }}</td>
+                <td>
+                    {% if product.is_active %}
+                    <span class="badge badge-success">Ativo</span>
+                    {% else %}
+                    <span class="badge">Inativo</span>
+                    {% endif %}
+                    {% if product.is_featured %}
+                    <span class="badge badge-info">Destaque</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ url_for('admin.product_edit', id=product.id) }}" class="btn btn-outline" style="padding: 5px 10px; font-size: 0.75rem;">Editar</a>
+                    <a href="{{ url_for('admin.product_delete', id=product.id) }}" class="btn btn-danger" onclick="return confirm('Tem certeza?')" style="padding: 5px 10px; font-size: 0.75rem;">Excluir</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

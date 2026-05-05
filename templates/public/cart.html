@@ -1,0 +1,110 @@
+{% extends "public/base.html" %}
+
+{% block title %}Seu Carrinho | FULÔ{% endblock %}
+
+{% block extra_css %}
+<style>
+    .cart-header { padding: 60px 0; text-align: center; }
+    .cart-header h1 { font-size: 3.5rem; }
+
+    .cart-table { width: 100%; border-collapse: collapse; margin-bottom: 60px; }
+    .cart-table th { text-align: left; padding: 20px 0; border-bottom: 1px solid var(--border); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+    .cart-table td { padding: 30px 0; border-bottom: 1px solid var(--border); vertical-align: middle; }
+
+    .product-info { display: flex; align-items: center; gap: 20px; }
+    .product-info img { width: 100px; aspect-ratio: 3/4; object-fit: cover; }
+    .product-info h3 { font-size: 1.2rem; margin-bottom: 5px; }
+    
+    .qty-control { display: flex; align-items: center; border: 1px solid var(--border); width: fit-content; }
+    .qty-control input { width: 40px; border: none; text-align: center; font-family: inherit; font-size: 0.9rem; outline: none; background: transparent; }
+    .qty-control button { background: none; border: none; padding: 10px; cursor: pointer; color: var(--muted); }
+
+    .cart-summary { max-width: 400px; margin-left: auto; background: #fff; padding: 40px; border: 1px solid var(--border); }
+    .summary-row { display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 1rem; }
+    .summary-total { border-top: 1px solid var(--border); padding-top: 20px; margin-top: 20px; font-size: 1.4rem; font-weight: 500; }
+
+    .empty-cart { text-align: center; padding: 100px 0; }
+    .empty-cart p { font-size: 1.2rem; color: var(--muted); margin-bottom: 40px; }
+
+    @media (max-width: 768px) {
+        .cart-table thead { display: none; }
+        .cart-table td { display: block; width: 100%; padding: 15px 0; border: none; }
+        .cart-table tr { display: block; border-bottom: 1px solid var(--border); padding: 20px 0; }
+        .cart-summary { max-width: 100%; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="container cart-header">
+    <h1>Carrinho.</h1>
+</section>
+
+<section class="container" style="margin-bottom: 120px;">
+    {% if items %}
+    <table class="cart-table">
+        <thead>
+            <tr>
+                <th>Produto</th>
+                <th>Preço</th>
+                <th>Quantidade</th>
+                <th>Subtotal</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr class="fade-in">
+                <td>
+                    <div class="product-info">
+                        <img src="{{ item.image_url }}" alt="{{ item.name }}">
+                        <div>
+                            <h3>{{ item.name }}</h3>
+                            <span class="label">{{ item.category }}</span>
+                        </div>
+                    </div>
+                </td>
+                <td>R$ {{ "%.2f"|format(item.price) }}</td>
+                <td>
+                    <form action="{{ url_for('cart.update', product_id=item.product_id) }}" method="POST" class="qty-control">
+                        <button type="submit" name="action" value="decrease" onclick="this.form.quantity.stepDown()">-</button>
+                        <input type="number" name="quantity" value="{{ item.quantity }}" min="1" readonly>
+                        <button type="submit" name="action" value="increase" onclick="this.form.quantity.stepUp()">+</button>
+                    </form>
+                </td>
+                <td>R$ {{ "%.2f"|format(item.subtotal) }}</td>
+                <td style="text-align: right;">
+                    <a href="{{ url_for('cart.remove', product_id=item.product_id) }}" class="icon-btn" aria-label="Remover">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="cart-summary">
+        <div class="summary-row">
+            <span>Subtotal</span>
+            <span>R$ {{ "%.2f"|format(total) }}</span>
+        </div>
+        <div class="summary-row">
+            <span>Frete</span>
+            <span style="font-size: 0.8rem; color: var(--muted);">Calculado no checkout</span>
+        </div>
+        <div class="summary-row summary-total">
+            <span>Total</span>
+            <span>R$ {{ "%.2f"|format(total) }}</span>
+        </div>
+        <a href="{{ url_for('checkout.index') }}" class="btn btn-full" style="background: var(--text); color: #fff; margin-top: 20px;">Finalizar Compra</a>
+        <a href="{{ url_for('public.shop') }}" class="label" style="text-align: center; margin-top: 20px; text-decoration: underline;">Continuar Comprando</a>
+    </div>
+
+    {% else %}
+    <div class="empty-cart fade-in">
+        <p>Seu carrinho está vazio.</p>
+        <a href="{{ url_for('public.shop') }}" class="btn">Explorar Loja</a>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

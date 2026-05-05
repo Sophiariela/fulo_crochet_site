@@ -1,0 +1,48 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Novo Banner{% endblock %}
+
+{% block content %}
+<div class="header-actions">
+    <h2>Adicionar Banner</h2>
+    <a href="{{ url_for('admin.banners') }}" class="btn btn-outline">Voltar</a>
+</div>
+
+<form action="{{ url_for('admin.banner_add') }}" method="POST" enctype="multipart/form-data" class="card" style="max-width: 800px;">
+    <div class="form-group">
+        <label>Título (Grande)</label>
+        <input type="text" name="title" placeholder="Ex: Brasilidade">
+    </div>
+    <div class="form-group">
+        <label>Subtítulo (Eyebrow)</label>
+        <input type="text" name="subtitle" placeholder="Ex: Coleção de Verão">
+    </div>
+    <div class="form-group">
+        <label>Texto do Botão</label>
+        <input type="text" name="button_text" value="Compre aqui">
+    </div>
+    <div class="form-group">
+        <label>Link (URL)</label>
+        <input type="text" name="link_url" placeholder="/shop?collection=Brasilidade">
+    </div>
+    <div class="form-group">
+        <label>Ordem de Exibição</label>
+        <input type="number" name="order" value="0">
+    </div>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div class="form-group">
+            <label>Imagem (Desktop - Recomendado 1920x1080)</label>
+            <input type="file" name="image" required>
+        </div>
+        <div class="form-group">
+            <label>Imagem (Mobile - Opcional)</label>
+            <input type="file" name="mobile_image">
+        </div>
+    </div>
+
+    <div style="margin-top: 30px; text-align: right;">
+        <button type="submit" class="btn btn-primary" style="padding: 12px 30px;">Salvar Banner</button>
+    </div>
+</form>
+{% endblock %}

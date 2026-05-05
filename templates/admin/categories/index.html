@@ -1,0 +1,36 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Categorias{% endblock %}
+
+{% block content %}
+<div class="header-actions">
+    <h2>Categorias</h2>
+    <a href="{{ url_for('admin.category_add') }}" class="btn btn-primary">Adicionar Nova</a>
+</div>
+
+<div class="card">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Slug</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cat in categories %}
+            <tr>
+                <td>{{ cat.id }}</td>
+                <td><strong>{{ cat.name }}</strong></td>
+                <td>{{ cat.slug }}</td>
+                <td>
+                    <a href="{{ url_for('admin.category_edit', id=cat.id) }}" class="btn btn-outline" style="padding: 5px 10px; font-size: 0.75rem;">Editar</a>
+                    <a href="{{ url_for('admin.category_delete', id=cat.id) }}" class="btn btn-danger" onclick="return confirm('Tem certeza? Isso pode afetar produtos vinculados.')" style="padding: 5px 10px; font-size: 0.75rem;">Excluir</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

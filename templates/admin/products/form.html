@@ -1,0 +1,106 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}{% if product %}Editar Produto{% else %}Novo Produto{% endif %}{% endblock %}
+
+{% block content %}
+<div class="header-actions">
+    <h2>{% if product %}Editar: {{ product.name }}{% else %}Novo Produto{% endif %}</h2>
+    <a href="{{ url_for('admin.products') }}" class="btn btn-outline">Voltar</a>
+</div>
+
+<form action="{% if product %}{{ url_for('admin.product_edit', id=product.id) }}{% else %}{{ url_for('admin.product_add') }}{% endif %}" method="POST" enctype="multipart/form-data" class="card">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+        <div class="left-col">
+            <div class="form-group">
+                <label>Nome do Produto</label>
+                <input type="text" name="name" value="{{ product.name if product else '' }}" required>
+            </div>
+            <div class="form-group">
+                <label>Subtítulo / Chamada Curta</label>
+                <input type="text" name="subtitle" value="{{ product.subtitle if product else '' }}">
+            </div>
+            <div class="form-group">
+                <label>Descrição</label>
+                <textarea name="description" rows="5">{{ product.description if product else '' }}</textarea>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                    <label>Preço (R$)</label>
+                    <input type="number" step="0.01" name="price" value="{{ product.price if product else '' }}" required>
+                </div>
+                <div class="form-group">
+                    <label>Preço com Desconto (Opcional)</label>
+                    <input type="number" step="0.01" name="discount_price" value="{{ product.discount_price if product else '' }}">
+                </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                    <label>Categoria</label>
+                       <select name="category_id">
+                         {% for cat in categories %}
+                         <option value="{{ cat.id }}" {% if product and product.category_id == cat.id %}selected{% endif %}>{{ cat.name }}</option>
+                         {% endfor %}
+                       </select>
+                </div>
+                <div class="form-group">
+                    <label>Coleção</label>
+                    <input type="text" name="collection" value="{{ product.collection if product else '' }}" placeholder="Ex: Brasilidade">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Estoque</label>
+                <input type="number" name="stock" value="{{ product.stock if product else 0 }}">
+            </div>
+	    <div class="form-group">
+	        <label>Tamanhos disponíveis</label>
+
+	     <div>
+   	         <label><input type="checkbox" name="sizes" value="P"> P</label>
+   		 <label><input type="checkbox" name="sizes" value="M"> M</label>
+   		 <label><input type="checkbox" name="sizes" value="G"> G</label>
+    		<label><input type="checkbox" name="sizes" value="GG"> GG</label>
+ 	     </div>
+             </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="is_featured" {% if product and product.is_featured %}checked{% endif %}> 
+                    Destaque na Homepage
+                </label>
+            </div>
+        </div>
+
+        <div class="right-col">
+            <div class="form-group">
+                <label>Imagem Principal</label>
+                {% if product and product.image_url %}
+                <img src="{{ product.image_url }}" style="width: 100px; margin-bottom: 10px; border-radius: 4px;">
+                {% endif %}
+                <input type="file" name="image_1">
+            </div>
+            <div class="form-group">
+                <label>Imagem 2 (Hover)</label>
+                {% if product and product.image_url_2 %}
+                <img src="{{ product.image_url_2 }}" style="width: 100px; margin-bottom: 10px; border-radius: 4px;">
+                {% endif %}
+                <input type="file" name="image_2">
+            </div>
+            <div class="form-group">
+                <label>Imagem 3</label>
+                <input type="file" name="image_3">
+            </div>
+            <div class="form-group">
+                <label>Imagem 4</label>
+                <input type="file" name="image_4">
+            </div>
+            <div class="form-group">
+                <label>Especificações Técnicas (Markdown ou Texto Simples)</label>
+                <textarea name="technical_details" rows="6">{{ product.technical_details if product else '' }}</textarea>
+            </div>	
+        </div>
+    </div>
+
+    <div style="margin-top: 30px; border-top: 1px solid var(--border); padding-top: 30px; text-align: right;">
+        <button type="submit" class="btn btn-primary" style="padding: 15px 40px;">Salvar Produto</button>
+    </div>
+</form>
+{% endblock %}

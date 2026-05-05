@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Pagamento | Fulô</title>
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <style>
+        body { font-family: sans-serif; background: #fdfcf9; margin: 0; padding: 40px; display: flex; justify-content: center; }
+        .container { max-width: 500px; width: 100%; background: white; padding: 40px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); text-align: center; }
+        h1 { font-family: 'Cormorant Garamond', serif; color: #3d2b1f; }
+        .order-info { color: #888; margin-bottom: 30px; }
+        .total { font-size: 2.5rem; font-weight: bold; margin: 20px 0; color: #111; }
+        
+        #payment-brick_container { margin-top: 20px; }
+        
+        .pix-container { display: none; margin-top: 30px; padding: 20px; border: 1px solid #eee; border-radius: 12px; }
+        .pix-qr { width: 200px; height: 200px; margin: 20px auto; }
+        .copy-box { background: #f9f9f9; padding: 10px; font-size: 0.8rem; word-break: break-all; margin-top: 10px; border: 1px dashed #ccc; }
+        
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 0.9rem; }
+        .tab.active { background: #3d2b1f; color: white; border-color: #3d2b1f; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Pagamento</h1>
+        <div class="order-info">Pedido #{{ order.id }}</div>
+        <div class="total">R$ {{ "%.2f"|format(order.total_amount) }}</div>
+
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('card')">Cartão de Crédito</div>
+            <div class="tab" onclick="switchTab('pix')">PIX</div>
+        </div>
+
+        <!-- Mercado Pago Wallet Button (Checkout Pro) -->
+        <div id="card-container">
+            <div id="wallet_container"></div>
+            <p style="font-size: 0.8rem; color: #999; margin-top: 15px;">Pague com segurança via Mercado Pago</p>
+        </div>
+
+        <!-- Custom PIX Display -->
+        <div id="pix-container" class="pix-container">
+            <h3>Pague com PIX</h3>
+            <p style="font-size: 0.9rem; color: #666;">Aponte a câmera do seu banco para o QR Code abaixo:</p>
+            <div id="pix-qr-wrap">
+                <p>Gerando QR Code...</p>
+            </div>
+            <div id="pix-copy-wrap" style="display:none;">
+                <p style="font-size: 0.8rem; margin-top: 15px;">Ou copie o código abaixo:</p>
+                <div class="copy-box" id="pix-code"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const mp = new MercadoPago('{{ public_key }}');
+        const bricksBuilder = mp.bricks();
+
+        // Initialize Checkout Pro Button
+        mp.bricks().create("wallet", "wallet_container", {
+            initialization: {
+                preferenceId: '{{ preference_id }}',
+            },
+        });
+
+        function switchTab(type) {
+            const cardCont = document.getElementById('card-container');
+            const pixCont = document.getElementById('pix-container');
+            const tabs = document.querySelectorAll('.tab');
+
+            if (type === 'pix') {
+                cardCont.style.display = 'none';
+                pixCont.style.display = 'block';
+                tabs[0].classList.remove('active');
+                tabs[1].classList.add('active');
+                loadPix();
+            } else {
+                cardCont.style.display = 'block';
+                pixCont.style.display = 'none';
+                tabs[0].classList.add('active');
+                tabs[1].classList.remove('active');
+            }
+        }
+
+        async function loadPix() {
+            const wrap = document.getElementById('pix-qr-wrap');
+            if (wrap.innerHTML.includes('img')) return; // Already loaded
+
+            try {
+                const response = await fetch('/checkout/pix/{{ order.id }}');
+                const data = await response.json();
+
+                if (data.qr_code_base64) {
+                    wrap.innerHTML = `<img src="data:image/png;base64,${data.qr_code_base64}" class="pix-qr">`;
+                    document.getElementById('pix-copy-wrap').style.display = 'block';
+                    document.getElementById('pix-code').innerText = data.copy_paste;
+                } else {
+                    wrap.innerHTML = '<p>Erro ao gerar PIX. Tente novamente.</p>';
+                }
+            } catch (e) {
+                wrap.innerHTML = '<p>Erro de conexão.</p>';
+            }
+        }
+    </script>
+</body>
+</html>

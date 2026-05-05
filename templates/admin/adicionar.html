@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Adicionar Produto | Fulô</title>
+    <style>
+        body { font-family: sans-serif; background: #f5f0eb; display: flex; justify-content: center; padding: 40px 20px; margin: 0; }
+        .box { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
+        h2 { color: #3d2b1f; margin-bottom: 24px; }
+        label { display: block; margin-bottom: 6px; color: #555; font-size: 0.9rem; }
+        input, textarea, select { width: 100%; padding: 10px; margin-bottom: 16px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 0.95rem; }
+        textarea { height: 100px; resize: vertical; }
+        button { width: 100%; padding: 12px; background: #3d2b1f; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; }
+        a { display: block; text-align: center; margin-top: 12px; color: #888; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>+ Adicionar Produto</h2>
+        <form method="POST" enctype="multipart/form-data">
+            <label>Nome</label>
+            <input type="text" name="nome" required>
+
+            <label>Preço (ex: 150.00)</label>
+            <input type="number" name="preco" step="0.01" required>
+
+            <label>Descrição</label>
+            <textarea name="descricao" required></textarea>
+
+            <label>Categoria</label>
+            <select name="categoria">
+                <option value="vestidos">Vestidos</option>
+                <option value="conjuntos">Conjuntos</option>
+                <option value="tops">Tops</option>
+                <option value="saias & shorts">Saias & Shorts</option>
+                <option value="acessorios">Acessórios</option>
+                <option value="biquinis">Biquinis</option>
+            </select>
+
+            <label>Foto do produto</label>
+            <input type="file" name="foto" accept="image/*" required>
+
+            <button type="submit">Salvar produto</button>
+        </form>
+        <a href="{{ url_for('admin.painel') }}">← Voltar ao painel</a>
+    </div>
+</body>
+</html>

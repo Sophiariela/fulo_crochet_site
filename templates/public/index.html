@@ -1,0 +1,193 @@
+{% extends "public/base.html" %}
+
+{% block title %}FULÔ | Crochê Contemporâneo{% endblock %}
+
+{% block extra_css %}
+<!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+<style>
+    /* HERO CAROUSEL */
+    .hero-swiper { width: 100%; height: calc(100vh - 140px); min-height: 600px; }
+    .swiper-slide { position: relative; overflow: hidden; }
+    .hero-img { width: 100%; height: 100%; object-fit: cover; transition: transform 8s linear; }
+    .swiper-slide-active .hero-img { transform: scale(1.1); }
+    
+    .hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.3));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: #fff;
+        padding: 20px;
+    }
+    
+    .hero-content { max-width: 800px; opacity: 0; transform: translateY(30px); transition: all 1s ease 0.5s; }
+    .swiper-slide-active .hero-content { opacity: 1; transform: translateY(0); }
+    
+    .hero-content h1 { font-size: clamp(3rem, 10vw, 6rem); margin-bottom: 20px; letter-spacing: -0.02em; }
+    .hero-content p { font-size: 1.2rem; margin-bottom: 40px; font-weight: 300; letter-spacing: 0.05em; }
+
+    /* FEATURED SECTIONS */
+    .section-header { text-align: center; margin-bottom: 60px; }
+    .section-header h2 { font-size: clamp(2.5rem, 5vw, 3.5rem); margin-bottom: 10px; }
+    
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 40px 20px;
+    }
+
+    .product-card { position: relative; transition: var(--transition); }
+    .product-image-wrapper { 
+        aspect-ratio: 3/4; 
+        overflow: hidden; 
+        background: #f9f9f9; 
+        margin-bottom: 20px; 
+        position: relative;
+    }
+    .product-image-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1); }
+    .product-card:hover .product-image-wrapper img { transform: scale(1.05); }
+    
+    .product-info { text-align: center; }
+    .product-info h3 { font-size: 1.2rem; margin-bottom: 5px; font-family: 'Inter', sans-serif; font-weight: 400; }
+    .product-price { font-size: 0.95rem; color: var(--muted); font-weight: 300; }
+
+    /* STORYTELLING SECTION */
+    .story-section { background: #f8f5f1; overflow: hidden; }
+    .story-grid { display: grid; grid-template-columns: 1fr 1fr; align-items: center; }
+    .story-content { padding: 10% 15%; }
+    .story-content h2 { font-size: 3.5rem; margin-bottom: 30px; }
+    .story-content p { font-size: 1.1rem; color: var(--muted); margin-bottom: 40px; font-weight: 300; }
+    .story-img-wrapper { aspect-ratio: 1; overflow: hidden; }
+    .story-img { width: 100%; height: 100%; object-fit: cover; }
+
+    @media (max-width: 1024px) {
+        .story-grid { grid-template-columns: 1fr; }
+        .story-img-wrapper { order: -1; }
+        .story-content { padding: 60px 20px; text-align: center; }
+    }
+
+    @media (max-width: 768px) {
+        .product-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- HERO CAROUSEL -->
+<section class="hero-swiper swiper">
+    <div class="swiper-wrapper">
+        {% for banner in banners %}
+        <div class="swiper-slide">
+            <img src="{{ banner.image_url }}" class="hero-img" alt="{{ banner.title }}">
+            <div class="hero-overlay">
+                <div class="hero-content">
+                    <span class="label" style="color: rgba(255,255,255,0.8);">{{ banner.subtitle }}</span>
+                    <h1>{{ banner.title }}</h1>
+                    <a href="{{ banner.link_url or url_for('public.shop') }}" class="btn" style="color: #fff; border-color: #fff;">{{ banner.button_text }}</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="swiper-pagination"></div>
+</section>
+
+<!-- BRASILIDADE COLLECTION -->
+<section class="container section-padding">
+    <div class="section-header">
+        <span class="label">Coleção Brasilidade</span>
+        <h2>A alma do feito à mão.</h2>
+        <p style="color: var(--muted); max-width: 600px; margin: 0 auto;">Peças que celebram a cultura e a natureza brasileira em cada ponto.</p>
+    </div>
+
+    <div class="product-grid">
+        {% for product in brasilidade_collection %}
+        <a href="{{ url_for('public.product_detail', id=product.id) }}" class="product-card">
+            <div class="product-image-wrapper">
+                <img src="{{ product.image_url }}" alt="{{ product.name }}" loading="lazy">
+            </div>
+            <div class="product-info">
+                <h3>{{ product.name }}</h3>
+                <div class="product-price">R$ {{ "%.2f"|format(product.price) }}</div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    
+    <div style="text-align: center; margin-top: 60px;">
+        <a href="{{ url_for('public.shop', collection='Brasilidade') }}" class="btn">Ver Coleção Completa</a>
+    </div>
+</section>
+
+<!-- STORYTELLING -->
+{% if storytelling_sections.brand_intro %}
+{% set st = storytelling_sections.brand_intro %}
+<section class="story-section">
+    <div class="story-grid">
+        {% if st.layout_type == 'image_left' %}
+        <div class="story-img-wrapper">
+            <img src="{{ st.image_url }}" class="story-img" alt="{{ st.title }}">
+        </div>
+        {% endif %}
+        
+        <div class="story-content">
+            <span class="label">{{ st.subtitle }}</span>
+            <h2>{{ st.title }}</h2>
+            <p>{{ st.content }}</p>
+            {% if st.button_text %}
+            <a href="{{ st.button_link }}" class="btn">{{ st.button_text }}</a>
+            {% endif %}
+        </div>
+
+        {% if st.layout_type == 'image_right' %}
+        <div class="story-img-wrapper">
+            <img src="{{ st.image_url }}" class="story-img" alt="{{ st.title }}">
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endif %}
+
+<!-- NEW ARRIVALS -->
+<section class="container section-padding">
+    <div class="section-header">
+        <span class="label">Lançamentos</span>
+        <h2>Novas Histórias.</h2>
+    </div>
+
+    <div class="product-grid">
+        {% for product in new_arrivals %}
+        <a href="{{ url_for('public.product_detail', id=product.id) }}" class="product-card">
+            <div class="product-image-wrapper">
+                <img src="{{ product.image_url }}" alt="{{ product.name }}" loading="lazy">
+            </div>
+            <div class="product-info">
+                <h3>{{ product.name }}</h3>
+                <div class="product-price">R$ {{ "%.2f"|format(product.price) }}</div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+    const swiper = new Swiper('.hero-swiper', {
+        loop: true,
+        autoplay: { delay: 5000, disableOnInteraction: false },
+        pagination: { el: '.swiper-pagination', clickable: true },
+        effect: 'fade',
+        fadeEffect: { crossFade: true }
+    });
+</script>
+{% endblock %}

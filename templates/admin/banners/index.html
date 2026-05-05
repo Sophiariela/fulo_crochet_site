@@ -1,0 +1,50 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Banners{% endblock %}
+
+{% block content %}
+<div class="header-actions">
+    <h2>Banners da Homepage</h2>
+    <a href="{{ url_for('admin.banner_add') }}" class="btn btn-primary">Adicionar Novo</a>
+</div>
+
+<div class="card">
+    <table>
+        <thead>
+            <tr>
+                <th>Ordem</th>
+                <th>Imagem</th>
+                <th>Título</th>
+                <th>Link</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for banner in banners %}
+            <tr>
+                <td>{{ banner.order }}</td>
+                <td>
+                    <img src="{{ banner.image_url }}" alt="" style="width: 120px; height: 60px; object-fit: cover; border-radius: 4px;">
+                </td>
+                <td>
+                    <strong>{{ banner.title }}</strong><br>
+                    <small style="color: var(--muted);">{{ banner.subtitle or '' }}</small>
+                </td>
+                <td>{{ banner.link_url or '-' }}</td>
+                <td>
+                    {% if banner.is_active %}
+                    <span class="badge badge-success">Ativo</span>
+                    {% else %}
+                    <span class="badge">Inativo</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ url_for('admin.banner_delete', id=banner.id) }}" class="btn btn-danger" onclick="return confirm('Tem certeza?')" style="padding: 5px 10px; font-size: 0.75rem;">Excluir</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

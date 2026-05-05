@@ -1,0 +1,44 @@
+{% extends "public/base.html" %}
+
+{% block title %}Cadastro | FULÔ{% endblock %}
+
+{% block extra_css %}
+<style>
+    .auth-container { max-width: 450px; margin: 100px auto; padding: 40px; background: #fff; border: 1px solid var(--border); }
+    .auth-container h2 { font-size: 2.5rem; margin-bottom: 30px; text-align: center; }
+    
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 8px; color: var(--muted); }
+    .form-group input { width: 100%; padding: 14px; border: 1px solid var(--border); font-family: inherit; font-size: 1rem; outline: none; transition: var(--transition); }
+    .form-group input:focus { border-color: var(--text); }
+    
+    .auth-links { margin-top: 30px; text-align: center; display: flex; flex-direction: column; gap: 10px; }
+    .auth-links a { font-size: 0.85rem; text-decoration: underline; color: var(--muted); }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="container">
+    <div class="auth-container fade-in">
+        <h2>Criar Conta.</h2>
+        <form method="POST">
+            <div class="form-group">
+                <label>Nome Completo</label>
+                <input type="text" name="name" required placeholder="Maria da Silva">
+            </div>
+            <div class="form-group">
+                <label>E-mail</label>
+                <input type="email" name="email" required placeholder="seu@email.com">
+            </div>
+            <div class="form-group">
+                <label>Senha</label>
+                <input type="password" name="password" required placeholder="No mínimo 6 caracteres">
+            </div>
+            <button type="submit" class="btn btn-full" style="background: var(--text); color: #fff;">Cadastrar</button>
+        </form>
+        <div class="auth-links">
+            <a href="{{ url_for('auth.login') }}">Já tem uma conta? Faça login</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

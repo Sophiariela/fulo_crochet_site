@@ -1,0 +1,45 @@
+{% extends "public/base.html" %}
+
+{% block title %}Login | FULÔ{% endblock %}
+
+{% block extra_css %}
+<style>
+    .auth-container { max-width: 450px; margin: 100px auto; padding: 40px; background: #fff; border: 1px solid var(--border); }
+    .auth-container h2 { font-size: 2.5rem; margin-bottom: 30px; text-align: center; }
+    
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 8px; color: var(--muted); }
+    .form-group input { width: 100%; padding: 14px; border: 1px solid var(--border); font-family: inherit; font-size: 1rem; outline: none; transition: var(--transition); }
+    .form-group input:focus { border-color: var(--text); }
+    
+    .auth-links { margin-top: 30px; text-align: center; display: flex; flex-direction: column; gap: 10px; }
+    .auth-links a { font-size: 0.85rem; text-decoration: underline; color: var(--muted); }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="container">
+    <div class="auth-container fade-in">
+        <h2>Entrar.</h2>
+        <form method="POST">
+            <div class="form-group">
+                <label>E-mail</label>
+                <input type="email" name="email" required placeholder="seu@email.com">
+            </div>
+            <div class="form-group">
+                <label>Senha</label>
+                <input type="password" name="password" required placeholder="********">
+            </div>
+            <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+                <input type="checkbox" name="remember" id="remember" style="width: auto;">
+                <label for="remember" style="margin-bottom: 0;">Lembrar-me</label>
+            </div>
+            <button type="submit" class="btn btn-full" style="background: var(--text); color: #fff;">Entrar</button>
+        </form>
+        <div class="auth-links">
+            <a href="{{ url_for('auth.register') }}">Não tem uma conta? Crie uma agora</a>
+            <a href="{{ url_for('auth.reset_request') }}">Esqueceu sua senha?</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

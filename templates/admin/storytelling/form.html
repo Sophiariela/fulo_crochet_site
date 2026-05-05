@@ -1,0 +1,60 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Editar Storytelling{% endblock %}
+
+{% block content %}
+<div class="header-actions">
+    <h2>Editar Seção: {{ item.section_name }}</h2>
+    <a href="{{ url_for('admin.storytelling') }}" class="btn btn-outline">Voltar</a>
+</div>
+
+<form action="{{ url_for('admin.storytelling_edit', id=item.id) }}" method="POST" enctype="multipart/form-data" class="card" style="max-width: 900px;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+        <div>
+            <div class="form-group">
+                <label>Título Principal</label>
+                <input type="text" name="title" value="{{ item.title }}" required>
+            </div>
+            <div class="form-group">
+                <label>Subtítulo (Eyebrow)</label>
+                <input type="text" name="subtitle" value="{{ item.subtitle or '' }}">
+            </div>
+            <div class="form-group">
+                <label>Conteúdo / Texto</label>
+                <textarea name="content" rows="8" required>{{ item.content }}</textarea>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                    <label>Texto do Botão</label>
+                    <input type="text" name="button_text" value="{{ item.button_text or '' }}">
+                </div>
+                <div class="form-group">
+                    <label>Link do Botão</label>
+                    <input type="text" name="button_link" value="{{ item.button_link or '' }}">
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="form-group">
+                <label>Imagem da Seção</label>
+                {% if item.image_url %}
+                <img src="{{ item.image_url }}" style="width: 100%; aspect-ratio: 1; object-fit: cover; margin-bottom: 15px; border-radius: 4px;">
+                {% endif %}
+                <input type="file" name="image">
+            </div>
+            <div class="form-group">
+                <label>Tipo de Layout</label>
+                <select name="layout_type">
+                    <option value="image_left" {% if item.layout_type == 'image_left' %}selected{% endif %}>Imagem à Esquerda</option>
+                    <option value="image_right" {% if item.layout_type == 'image_right' %}selected{% endif %}>Imagem à Direita</option>
+                    <option value="full_width" {% if item.layout_type == 'full_width' %}selected{% endif %}>Largura Total</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 30px; text-align: right;">
+        <button type="submit" class="btn btn-primary" style="padding: 12px 30px;">Salvar Alterações</button>
+    </div>
+</form>
+{% endblock %}

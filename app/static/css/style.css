@@ -1,0 +1,424 @@
+/* 
+   FULÔ - DESIGN SYSTEM 
+   Estética: Premium, Minimalista, Artesanal
+*/
+
+:root {
+    /* Color Palette */
+    --color-bg: #FDFCFB;        /* Off-white ultra-light */
+    --color-bg-alt: #F4F1EE;    /* Bone / Light Grey para seções */
+    --color-text-main: #1A1A1A;  /* Onyx para legibilidade */
+    --color-text-muted: #666666; /* Grey para descrições */
+    --color-accent: #8C7355;     /* Bronze suave para detalhes artesanais */
+    --color-white: #FFFFFF;
+    
+    /* Typography */
+    --font-serif: 'Playfair Display', serif;
+    --font-sans: 'Poppins', sans-serif;
+    
+    /* Spacing System (8px base) */
+    --space-xs: 0.5rem;  /* 8px */
+    --space-s: 1rem;     /* 16px */
+    --space-m: 2rem;     /* 32px */
+    --space-l: 4rem;     /* 64px */
+    --space-xl: 8rem;    /* 128px */
+    
+    /* Transitions */
+    --transition-smooth: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Base Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--color-bg);
+    color: var(--color-text-main);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Typography Hierarchy */
+h1, h2, h3 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+
+p {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    font-weight: 300;
+}
+
+.container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 var(--space-m);
+}
+
+/* Buttons System */
+.btn {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    text-decoration: none;
+    transition: var(--transition-smooth);
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+/* Botão Primário (Preto/Dark) */
+.btn-primary {
+    background-color: var(--color-text-main);
+    color: var(--color-white);
+}
+
+.btn-primary:hover {
+    background-color: transparent;
+    color: var(--color-text-main);
+    border-color: var(--color-text-main);
+}
+
+/* Botão Outline (Transparente) */
+.btn-outline {
+    background-color: transparent;
+    color: var(--color-text-main);
+    border-color: var(--color-text-main);
+}
+
+.btn-outline:hover {
+    background-color: var(--color-text-main);
+    color: var(--color-white);
+}
+
+/* Link Elegante (Underline) */
+.btn-link {
+    padding: 0;
+    background: none;
+    color: var(--color-text-main);
+    position: relative;
+    text-decoration: none;
+}
+
+.btn-link::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: var(--color-text-main);
+    transition: var(--transition-smooth);
+    transform: scaleX(0);
+    transform-origin: right;
+}
+
+.btn-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+/* Header & Navigation */
+.navbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: var(--space-m) 0;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+}
+
+.nav-logo {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    color: var(--color-text-main);
+    text-decoration: none;
+    letter-spacing: 0.2em;
+}
+
+/* Hero Section */
+.hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    color: var(--color-white);
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    padding: 0 var(--space-m);
+}
+
+.hero-title {
+    font-size: clamp(3rem, 8vw, 6rem);
+    margin-bottom: var(--space-s);
+}
+
+.hero-subtitle {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4em;
+    margin-bottom: var(--space-m);
+}
+
+/* Manifesto Section */
+.manifesto {
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.manifesto-tag {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: var(--color-accent);
+    margin-bottom: var(--space-s);
+    display: block;
+}
+
+.manifesto-title {
+    font-size: 2.5rem;
+    margin-bottom: var(--space-m);
+    color: var(--color-text-main);
+}
+
+.manifesto-text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+/* Products Section */
+.products-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: var(--space-l);
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-m);
+}
+
+.product-card {
+    text-decoration: none;
+    color: inherit;
+}
+
+.product-image-wrapper {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background-color: var(--color-bg-alt);
+    margin-bottom: var(--space-s);
+}
+
+.product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition-smooth);
+}
+
+.product-card:hover .product-image {
+    transform: scale(1.05);
+}
+
+.product-info {
+    text-align: left;
+}
+
+.product-name {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    margin-bottom: 0.25rem;
+}
+
+.product-category {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.product-price {
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.tag-limited {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--color-white);
+    padding: 0.4rem 0.8rem;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* Filters */
+.filter-nav {
+    display: flex;
+    gap: var(--space-m);
+    list-style: none;
+    overflow-x: auto;
+    padding-bottom: var(--space-s);
+}
+
+.filter-btn {
+    background: none;
+    border: none;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: var(--transition-smooth);
+}
+
+.filter-btn.active, .filter-btn:hover {
+    color: var(--color-text-main);
+}
+
+/* Footer */
+.footer-minimal {
+    border-top: 1px solid var(--color-bg-alt);
+    padding: var(--space-l) 0;
+    text-align: center;
+}
+
+.footer-nav {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-m);
+    margin-bottom: var(--space-m);
+}
+
+.footer-link {
+    text-decoration: none;
+    color: var(--color-text-muted);
+    font-size: 0.8rem;
+    transition: var(--transition-smooth);
+}
+
+.footer-link:hover {
+    color: var(--color-text-main);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .products-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .products-header {
+        flex-direction: column;
+        align-items: center;
+        gap: var(--space-m);
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --space-xl: 4rem;
+        --space-l: 2rem;
+    }
+    
+    .container {
+        padding: 0 var(--space-s);
+    }
+}
+.size-selector {
+  margin: 20px 0;
+}
+
+.size-label {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--text);
+}
+
+.size-options {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.size-pill input {
+  display: none;
+}
+
+.size-pill span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.size-pill span:hover {
+  border-color: var(--text);
+}
+
+.size-pill input:checked + span {
+  background: var(--text);
+  color: white;
+  border-color: var(--text);
+}
