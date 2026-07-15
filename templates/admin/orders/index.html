@@ -41,7 +41,7 @@
                     {% endif %}
                 </td>
                 <td>
-                    <a href="#" class="btn btn-outline" style="padding: 5px 10px; font-size: 0.75rem;">Detalhes</a>
+                    <a href="{{ url_for('admin.order_detail', id=order.id) }}" class="btn btn-outline" style="padding: 5px 10px; font-size: 0.75rem;">Detalhes</a>
                 </td>
             </tr>
             {% else %}

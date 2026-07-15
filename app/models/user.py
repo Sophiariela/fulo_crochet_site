@@ -22,6 +22,14 @@ class User(db.Model, TimestampMixin, UserMixin):
     orders = db.relationship('Order', backref='user', lazy=True)
     cart = db.relationship('Cart', backref='user', uselist=False, cascade="all, delete-orphan")
 
+    @property
+    def password(self):
+        return self.password_hash
+
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
+
     def get_id(self):
         return str(self.id)
 

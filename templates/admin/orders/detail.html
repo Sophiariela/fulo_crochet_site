@@ -1,0 +1,100 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Pedido #{{ order.id }}{% endblock %}
+
+{% block content %}
+<div class="header-actions">
+    <h2>Pedido #{{ order.id }}</h2>
+    <a href="{{ url_for('admin.orders') }}" class="btn btn-outline">Voltar</a>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+    <div class="card">
+        <h3 style="margin-bottom: 20px; font-size: 1.1rem;">Informações do Pedido</h3>
+        <table style="width: 100%;">
+            <tr><td style="font-weight: 600; width: 140px;">Status</td><td>
+                {% if order.status == 'paid' %}
+                    <span class="badge badge-success">Pago</span>
+                {% elif order.status == 'pending' %}
+                    <span class="badge badge-info">Pendente</span>
+                {% elif order.status == 'cancelled' %}
+                    <span class="badge badge-danger">Cancelado</span>
+                {% elif order.status == 'shipped' %}
+                    <span class="badge badge-info">Enviado</span>
+                {% elif order.status == 'delivered' %}
+                    <span class="badge badge-success">Entregue</span>
+                {% else %}
+                    <span class="badge">{{ order.status }}</span>
+                {% endif %}
+            </td></tr>
+            <tr><td style="font-weight: 600;">Data</td><td>{{ order.created_at.strftime('%d/%m/%Y %H:%M') }}</td></tr>
+            <tr><td style="font-weight: 600;">Subtotal</td><td>R$ {{ "%.2f"|format(order.total_amount + order.discount_amount - order.shipping_cost) }}</td></tr>
+            <tr><td style="font-weight: 600;">Frete</td><td>R$ {{ "%.2f"|format(order.shipping_cost) }}</td></tr>
+            {% if order.discount_amount and order.discount_amount > 0 %}
+            <tr><td style="font-weight: 600;">Desconto</td><td style="color: #27ae60;">- R$ {{ "%.2f"|format(order.discount_amount) }}</td></tr>
+            {% endif %}
+            <tr><td style="font-weight: 600; font-size: 1.1rem;">Total</td><td style="font-size: 1.1rem; font-weight: 700;">R$ {{ "%.2f"|format(order.total_amount) }}</td></tr>
+        </table>
+    </div>
+
+    <div class="card">
+        <h3 style="margin-bottom: 20px; font-size: 1.1rem;">Cliente</h3>
+        <table style="width: 100%;">
+            <tr><td style="font-weight: 600; width: 100px;">Nome</td><td>{{ order.user.name }}</td></tr>
+            <tr><td style="font-weight: 600;">E-mail</td><td>{{ order.user.email }}</td></tr>
+            <tr><td style="font-weight: 600;">Telefone</td><td>{{ order.user.phone or '—' }}</td></tr>
+        </table>
+    </div>
+</div>
+
+<div class="card" style="margin-top: 10px;">
+    <h3 style="margin-bottom: 20px; font-size: 1.1rem;">Endereço de Entrega</h3>
+    {% if order.shipping_address %}
+    <p>
+        {{ order.shipping_address.street }}, {{ order.shipping_address.number }}
+        {% if order.shipping_address.complement %} - {{ order.shipping_address.complement }}{% endif %}<br>
+        {{ order.shipping_address.neighborhood }}<br>
+        {{ order.shipping_address.city }} / {{ order.shipping_address.state }}<br>
+        CEP: {{ order.shipping_address.zip_code }}
+    </p>
+    {% else %}
+    <p style="color: var(--muted);">Endereço não disponível.</p>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h3 style="margin-bottom: 20px; font-size: 1.1rem;">Produtos</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Produto</th>
+                <th>Qtd</th>
+                <th>Preço Unit.</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order.items %}
+            <tr>
+                <td>
+                    <strong>{{ item.product.name }}</strong>
+                    {% if item.product.subtitle %}
+                    <br><small style="color: var(--muted);">{{ item.product.subtitle }}</small>
+                    {% endif %}
+                </td>
+                <td>{{ item.quantity }}</td>
+                <td>R$ {{ "%.2f"|format(item.price_at_time) }}</td>
+                <td>R$ {{ "%.2f"|format(item.price_at_time * item.quantity) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% if order.coupon_rel %}
+<div class="card">
+    <h3 style="margin-bottom: 10px; font-size: 1.1rem;">Cupom</h3>
+    <p>Cupom: <strong>{{ order.coupon_rel.code }}</strong> ({{ order.coupon_rel.discount_type == 'percentage' and order.coupon_rel.value|string + '%' or 'R$ ' + "%.2f"|format(order.coupon_rel.value) }})</p>
+</div>
+{% endif %}
+{% endblock %}

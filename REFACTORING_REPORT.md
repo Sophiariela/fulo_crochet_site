@@ -51,7 +51,7 @@ Foi implementado um "Master Template" que centraliza a estrutura comum:
 - **Grid Adaptativo:** Transição suave de 3 colunas (desktop) para 2 ou 1 (mobile).
 
 ### Ícones
-Substituição de emojis por **SVG inline**, garantindo carregamento rápido e estética profissional e minimalista.
+Uso de **SVG inline**, garantindo carregamento rápido e estética profissional e minimalista.
 
 ---
 

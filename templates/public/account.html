@@ -33,7 +33,7 @@
 
 {% block content %}
 <section class="container account-header">
-    <span class="label">Bem-vinda, {{ user.name.split(' ')[0] }}</span>
+    <span class="label">Bem-vinda, {{ (user.name or '').split(' ')[0] }}</span>
     <h1>Minha Conta.</h1>
 </section>
 

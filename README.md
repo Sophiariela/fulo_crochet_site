@@ -12,7 +12,6 @@ built entirely on Android using Termux.
 ## Features
 
 - Product catalog with real-time category filtering
-- WhatsApp Business integration for direct purchase inquiries
 - Images self-hosted via static/images
 - Fully responsive, mobile-first design
 - Minimalist aesthetic with Playfair Display typography

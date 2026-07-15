@@ -61,56 +61,108 @@
         outline: none;
     }
 
-    /* SHIPPING CALCULATOR */
+    /* SHIPPING BOX */
     .shipping-box {
-        background: #f8f5f1;
-        padding: 25px;
         margin-bottom: 50px;
+        padding: 25px;
+        background: #fff;
+        border: 1px solid var(--border);
     }
-    .shipping-box h4 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 15px; }
-    .shipping-form { display: flex; gap: 10px; }
-    .shipping-form input { 
-        flex: 1; 
-        padding: 12px; 
-        border: 1px solid var(--border); 
+    .shipping-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 15px;
+        display: block;
+        color: var(--muted);
+    }
+    .shipping-row {
+        display: flex;
+        gap: 0;
+        border: 1px solid #dcdcdc;
+        height: 48px;
+    }
+    .shipping-row input {
+        flex: 1;
+        border: none;
+        padding: 0 15px;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.9rem;
         outline: none;
-        font-family: inherit;
     }
-    .shipping-form button {
-        padding: 0 20px;
+    .shipping-row input::placeholder { color: #aaa; }
+    .btn-calculate {
         background: var(--text);
         color: #fff;
         border: none;
+        padding: 0 25px;
         cursor: pointer;
-        font-size: 0.8rem;
-        text-transform: uppercase;
-    }
-
-    /* TABS/DETAILS */
-    .pdp-details { margin-top: 50px; border-top: 1px solid var(--border); }
-    .detail-item { border-bottom: 1px solid var(--border); }
-    .detail-header { 
-        padding: 20px 0; 
-        display: flex; 
-        justify-content: space-between; 
-        align-items: center; 
-        cursor: pointer;
-        font-size: 0.9rem;
+        font-size: 0.75rem;
         text-transform: uppercase;
         letter-spacing: 0.1em;
-        font-weight: 600;
+        transition: var(--transition);
     }
-    .detail-content { 
-        max-height: 0; 
-        overflow: hidden; 
-        transition: max-height 0.4s ease; 
-        font-size: 0.95rem; 
+    .btn-calculate:hover { background: var(--accent); }
+    .shipping-result {
+        margin-top: 15px;
+        font-size: 0.85rem;
+        color: var(--text);
+        line-height: 1.4;
+    }
+
+    /* ACCORDION */
+    .pdp-accordion {
+        border-top: 1px solid var(--border);
+    }
+    .accordion-item {
+        border-bottom: 1px solid var(--border);
+    }
+    .accordion-header {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 0;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.4rem;
+        text-align: left;
+        color: var(--text);
+        transition: var(--transition);
+    }
+    .accordion-header:hover { color: var(--muted); }
+    .accordion-header .icon-plus {
+        width: 18px;
+        height: 18px;
+        transition: transform 0.4s ease;
+    }
+    .accordion-item.active .icon-plus { transform: rotate(45deg); }
+    
+    .accordion-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+    .accordion-item.active .accordion-content {
+        max-height: 500px;
+        padding-bottom: 30px;
+    }
+    .accordion-content p {
+        font-size: 0.95rem;
         color: var(--muted);
+        font-weight: 300;
         line-height: 1.8;
     }
-    .detail-item.active .detail-content { max-height: 500px; padding-bottom: 30px; }
-    .detail-item.active .plus-icon { transform: rotate(45deg); }
-    .plus-icon { transition: transform 0.4s ease; }
+    .specs-list {
+        list-style: none;
+        padding: 0;
+        font-size: 0.95rem;
+        color: var(--muted);
+        font-weight: 300;
+    }
+    .specs-list li { margin-bottom: 8px; }
 
     @media (max-width: 1024px) {
         .pdp-container { grid-template-columns: 1fr; gap: 40px; }
@@ -166,15 +218,22 @@
         
         <p class="pdp-installments">ou em até 6x de R$ {{ "%.2f"|format(product.price / 6) }} sem juros</p>
 
+        {% if product.is_accompanied %}
+        <div style="margin: -15px 0 30px; display: flex; align-items: center; gap: 10px; color: #27ae60; font-size: 0.85rem; font-weight: 500;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            Acompanha embalagem especial em algodão
+        </div>
+        {% endif %}
+
         <form action="{{ url_for('cart.add', product_id=product.id) }}" method="POST" class="pdp-actions">
          {% if product.sizes %}
          <div class="size-selector">
             <label class="size-label">Tamanho:</label>
             <div class="size-options">
-              {% for size in product.sizes.split(',') %}
+              {% for size in (product.sizes or '').split(',') %}
                  <label class="size-pill">
-                    <input type="radio" name="size" value="{{ size.strip() }}" required>
-                    <span>{{ size.strip() }}</span>
+                    <input type="radio" name="size" value="{{ (size or '').strip() }}" required>
+                    <span>{{ (size or '').strip() }}</span>
                   </label>
                 {% endfor %}
               </div>
@@ -191,47 +250,68 @@
 
         <!-- SHIPPING -->
         <div class="shipping-box">
-            <h4>Calcular Frete</h4>
-            <div class="shipping-form">
-                <input type="text" id="shipZip" placeholder="00000-000" maxlength="9">
-                <button type="button" onclick="calcShipping()">OK</button>
+            <label class="shipping-label">Calcular frete e prazo</label>
+            <div class="shipping-row">
+                <input
+                    type="text"
+                    id="cep"
+                    placeholder="00000-000"
+                    maxlength="9"
+                >
+                <button type="button" id="calculate-shipping" class="btn-calculate">
+                    Calcular
+                </button>
             </div>
-            <p id="shipResult" style="margin-top: 15px; font-size: 0.9rem; display: none;"></p>
+            <div id="shipping-result" class="shipping-result"></div>
         </div>
 
-        <!-- DETAILS -->
-        <div class="pdp-details">
-            <div class="detail-item active">
-                <div class="detail-header" onclick="toggleDetail(this)">
+        <!-- DETAILS ACCORDION -->
+        <div class="pdp-accordion">
+            <div class="accordion-item">
+                <button class="accordion-header" onclick="toggleAccordion(this)">
                     <span>Descrição</span>
-                    <span class="plus-icon">+</span>
-                </div>
-                <div class="detail-content">
-                    {{ product.description }}
-                </div>
-            </div>
-            <div class="detail-item">
-                <div class="detail-header" onclick="toggleDetail(this)">
-                    <span>Especificações Técnicas</span>
-                    <span class="plus-icon">+</span>
-                </div>
-                <div class="detail-content">
-                    {% if product.technical_details %}
-                        {{ product.technical_details }}
+                    <svg class="icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                </button>
+                <div class="accordion-content">
+                    {% if product.description %}
+                    <div class="product-description">{{ product.description|safe }}</div>
                     {% else %}
-                        • Composição: 100% Algodão Mercerizado<br>
-                        • Técnica: Crochê Manual / Handmade<br>
-                        • Produção: Slow Fashion Brasileira
+                    <p>{{ product.subtitle or 'Produto artesanal feito à mão com amor e dedicação.' }}</p>
                     {% endif %}
                 </div>
             </div>
-            <div class="detail-item">
-                <div class="detail-header" onclick="toggleDetail(this)">
-                    <span>Envio & Devolução</span>
-                    <span class="plus-icon">+</span>
+
+            <div class="accordion-item">
+                <button class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Especificações Técnicas</span>
+                    <svg class="icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                </button>
+                <div class="accordion-content">
+                    {% if product.technical_details %}
+                    <div class="product-specs">{{ product.technical_details|safe }}</div>
+                    {% else %}
+                    <ul class="specs-list">
+                        <li>Produção artesanal e lenta</li>
+                        <li>Fio 100% algodão premium</li>
+                        <li>Feito manualmente por artesãs brasileiras</li>
+                        <li>Peça exclusiva e única</li>
+                    </ul>
+                    {% endif %}
                 </div>
-                <div class="detail-content">
-                    Peça produzida sob demanda. Prazo de produção: até 15 dias úteis. Enviamos para todo o Brasil via SEDEX ou PAC. Trocas em até 7 dias após o recebimento.
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Envio & Devolução</span>
+                    <svg class="icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                </button>
+                <div class="accordion-content">
+                    {% if product.shipping_and_returns %}
+                    <div class="product-shipping">{{ product.shipping_and_returns|safe }}</div>
+                    {% else %}
+                    <p>Enviamos para todo o Brasil com rastreamento. Prazo médio entre 3 e 10 dias úteis após a postagem.</p>
+                    <p style="margin-top: 10px;">Trocas e devoluções podem ser solicitadas em até 7 dias corridos após o recebimento, conforme o Código de Defesa do Consumidor.</p>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -266,39 +346,31 @@
 {% block extra_js %}
 <script>
     function changeImage(url, thumb) {
-        document.getElementById('mainImage').src = url;
-        document.querySelectorAll('.pdp-thumb').forEach(t => t.classList.remove('active'));
-        thumb.classList.add('active');
+        var main = document.getElementById('mainImage');
+        if (main) main.src = url;
+        document.querySelectorAll('.pdp-thumb').forEach(function(t) { t.classList.remove('active'); });
+        if (thumb) thumb.classList.add('active');
     }
 
     function changeQty(val) {
-        const input = document.getElementById('qtyInput');
-        let current = parseInt(input.value);
-        if (current + val >= 1) {
-            input.value = current + val;
-        }
+        var input = document.getElementById('qtyInput');
+        if (!input) return;
+        var current = parseInt(input.value) || 1;
+        var next = current + val;
+        if (next >= 1) input.value = next;
     }
 
-    function toggleDetail(header) {
-        const item = header.parentElement;
-        item.classList.toggle('active');
-    }
-
-    async function calcShipping() {
-        const zip = document.getElementById('shipZip').value;
-        const result = document.getElementById('shipResult');
-        if (!zip) return;
+    function toggleAccordion(btn) {
+        const item = btn.parentElement;
+        const isActive = item.classList.contains('active');
         
-        try {
-            const response = await fetch(`/shipping/${zip}`);
-            const data = await response.json();
-            result.innerText = `Frete estimado: R$ ${data.cost.toFixed(2).replace('.', ',')}. Prazo: 7 a 15 dias úteis.`;
-            result.style.display = 'block';
-            result.style.color = 'var(--text)';
-        } catch (e) {
-            result.innerText = 'Erro ao calcular frete.';
-            result.style.display = 'block';
-            result.style.color = '#e74c3c';
+        // Close other items
+        document.querySelectorAll('.accordion-item').forEach(i => {
+            i.classList.remove('active');
+        });
+        
+        if (!isActive) {
+            item.classList.add('active');
         }
     }
 </script>

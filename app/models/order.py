@@ -8,6 +8,9 @@ class Order(db.Model, TimestampMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     status = db.Column(db.String(50), nullable=False, default='pending') # pending, paid, shipped, delivered, cancelled
     total_amount = db.Column(db.Numeric(10, 2), nullable=False)
+    shipping_cost = db.Column(db.Numeric(10, 2), default=0)
+    discount_amount = db.Column(db.Numeric(10, 2), default=0)
+    coupon_id = db.Column(db.Integer, db.ForeignKey('coupons.id'))
     shipping_address_id = db.Column(db.Integer, db.ForeignKey('addresses.id'), nullable=False)
     
     # Relationships

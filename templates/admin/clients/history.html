@@ -1,0 +1,77 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Histórico - {{ user.name }}{% endblock %}
+
+{% block content %}
+<div class="header-actions">
+    <h2>Histórico: {{ user.name }}</h2>
+    <a href="{{ url_for('admin.clients') }}" class="btn btn-outline">Voltar</a>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; margin-bottom: 40px;">
+    <div class="card" style="text-align: center;">
+        <div style="font-size: 2rem; font-weight: 700; color: var(--primary);">{{ orders|length }}</div>
+        <div style="color: var(--muted); font-size: 0.85rem; margin-top: 5px;">Pedidos Realizados</div>
+    </div>
+    <div class="card" style="text-align: center;">
+        <div style="font-size: 2rem; font-weight: 700; color: var(--primary);">R$ {{ "%.2f"|format(total_spent) }}</div>
+        <div style="color: var(--muted); font-size: 0.85rem; margin-top: 5px;">Total Gasto</div>
+    </div>
+    <div class="card" style="text-align: center;">
+        <div style="font-size: 2rem; font-weight: 700; color: var(--primary);">{{ user.email }}</div>
+        <div style="color: var(--muted); font-size: 0.85rem; margin-top: 5px;">E-mail</div>
+    </div>
+</div>
+
+<div class="card">
+    <h3 style="margin-bottom: 20px; font-size: 1.1rem;">Pedidos</h3>
+    {% if orders %}
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Data</th>
+                <th>Produtos</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>#{{ order.id }}</td>
+                <td>{{ order.created_at.strftime('%d/%m/%Y') }}</td>
+                <td>
+                    {% for item in order.items %}
+                    {{ item.product.name }}{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </td>
+                <td>R$ {{ "%.2f"|format(order.total_amount) }}</td>
+                <td>
+                    {% if order.status == 'paid' %}
+                        <span class="badge badge-success">Pago</span>
+                    {% elif order.status == 'pending' %}
+                        <span class="badge badge-info">Pendente</span>
+                    {% elif order.status == 'cancelled' %}
+                        <span class="badge badge-danger">Cancelado</span>
+                    {% elif order.status == 'shipped' %}
+                        <span class="badge badge-info">Enviado</span>
+                    {% elif order.status == 'delivered' %}
+                        <span class="badge badge-success">Entregue</span>
+                    {% else %}
+                        <span class="badge">{{ order.status }}</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ url_for('admin.order_detail', id=order.id) }}" class="btn btn-outline" style="padding: 5px 10px; font-size: 0.75rem;">Detalhes</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color: var(--muted); text-align: center; padding: 40px;">Este cliente ainda não realizou nenhum pedido.</p>
+    {% endif %}
+</div>
+{% endblock %}

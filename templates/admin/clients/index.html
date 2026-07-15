@@ -28,7 +28,7 @@
                 <td>{{ user.created_at.strftime('%d/%m/%Y') }}</td>
                 <td>{{ user.orders|length if user.orders else 0 }}</td>
                 <td>
-                    <a href="#" class="btn btn-outline" style="padding: 5px 10px; font-size: 0.75rem;">Ver Histórico</a>
+                    <a href="{{ url_for('admin.client_history', id=user.id) }}" class="btn btn-outline" style="padding: 5px 10px; font-size: 0.75rem;">Ver Histórico</a>
                 </td>
             </tr>
             {% else %}

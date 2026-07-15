@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 from app.models.product import Product, Category
 from app.models.order import Order
 from app.models.user import User
-from app.models.cms import Banner, Storytelling
+from app.models.cms import Banner, Storytelling, PopupConfig
 from app import db
 from werkzeug.utils import secure_filename
 import os
@@ -58,7 +58,9 @@ def product_add():
         sizes = request.form.getlist("sizes")
         sizes_str = ",".join(sizes)
         is_featured = 'is_featured' in request.form
+        is_accompanied = 'is_accompanied' in request.form
         technical_details = request.form.get('technical_details')
+        shipping_and_returns = request.form.get('shipping_and_returns')
         
         image_urls = []
         for i in range(1, 5):
@@ -83,7 +85,9 @@ def product_add():
             stock=stock, 
             sizes=sizes_str,
             is_featured=is_featured,
+            is_accompanied=is_accompanied,
             technical_details=technical_details,
+            shipping_and_returns=shipping_and_returns,
             image_url=image_urls[0],
             image_url_2=image_urls[1],
             image_url_3=image_urls[2],
@@ -111,8 +115,14 @@ def product_edit(id):
         product.category_id = request.form.get('category_id')
         product.collection = request.form.get('collection')
         product.stock = request.form.get('stock')
+        
+        sizes = request.form.getlist("sizes")
+        product.sizes = ",".join(sizes) if sizes else ""
+        
         product.is_featured = 'is_featured' in request.form
-        product.technical_details = request.form.get('technical_details')
+        product.is_accompanied = 'is_accompanied' in request.form
+        product.technical_details = request.form.get('technical_details') or ""
+        product.shipping_and_returns = request.form.get('shipping_and_returns') or ""
         
         for i in range(1, 5):
             file = request.files.get(f'image_{i}')
@@ -197,7 +207,7 @@ def product_delete(id):
 @login_required
 @admin_required
 def banners():
-    all_banners = Banner.query.all()
+    all_banners = Banner.query.order_by(Banner.order.asc()).all()
     return render_template('admin/banners/index.html', banners=all_banners)
 
 @admin_bp.route('/banners/add', methods=['GET', 'POST'])
@@ -207,9 +217,12 @@ def banner_add():
     if request.method == 'POST':
         title = request.form.get('title')
         subtitle = request.form.get('subtitle')
+        description = request.form.get('description')
         button_text = request.form.get('button_text')
         link_url = request.form.get('link_url')
-        order = request.form.get('order', 0)
+        order_val = request.form.get('order', '0')
+        order = int(order_val) if order_val and order_val.isdigit() else 0
+        is_active = 'is_active' in request.form
         
         file = request.files.get('image')
         mobile_file = request.files.get('mobile_image')
@@ -217,30 +230,71 @@ def banner_add():
         image_url = None
         mobile_image_url = None
         
-        if file:
+        img_path = os.path.join(current_app.root_path, 'static/images')
+        if not os.path.exists(img_path): os.makedirs(img_path)
+
+        if file and file.filename:
             filename = secure_filename(file.filename)
-            file.save(os.path.join(current_app.root_path, 'static/images', filename))
+            file.save(os.path.join(img_path, filename))
             image_url = f'/static/images/{filename}'
             
-        if mobile_file:
+        if mobile_file and mobile_file.filename:
             m_filename = "mobile_" + secure_filename(mobile_file.filename)
-            mobile_file.save(os.path.join(current_app.root_path, 'static/images', m_filename))
+            mobile_file.save(os.path.join(img_path, m_filename))
             mobile_image_url = f'/static/images/{m_filename}'
             
         new_banner = Banner(
             title=title, 
             subtitle=subtitle, 
+            description=description,
             button_text=button_text,
             image_url=image_url, 
             mobile_image_url=mobile_image_url,
             link_url=link_url,
-            order=order
+            order=order,
+            is_active=is_active
         )
         db.session.add(new_banner)
         db.session.commit()
-        flash('Banner adicionado!', 'success')
+        flash('Banner adicionado com sucesso!', 'success')
         return redirect(url_for('admin.banners'))
     return render_template('admin/banners/form.html', banner=None)
+
+@admin_bp.route('/banners/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def banner_edit(id):
+    banner = Banner.query.get_or_404(id)
+    if request.method == 'POST':
+        banner.title = request.form.get('title')
+        banner.subtitle = request.form.get('subtitle')
+        banner.description = request.form.get('description')
+        banner.button_text = request.form.get('button_text')
+        banner.link_url = request.form.get('link_url')
+        order_val = request.form.get('order', '0')
+        banner.order = int(order_val) if order_val and order_val.isdigit() else 0
+        banner.is_active = 'is_active' in request.form
+        
+        file = request.files.get('image')
+        mobile_file = request.files.get('mobile_image')
+        
+        img_path = os.path.join(current_app.root_path, 'static/images')
+        if not os.path.exists(img_path): os.makedirs(img_path)
+
+        if file and file.filename:
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(img_path, filename))
+            banner.image_url = f'/static/images/{filename}'
+            
+        if mobile_file and mobile_file.filename:
+            m_filename = "mobile_" + secure_filename(mobile_file.filename)
+            mobile_file.save(os.path.join(img_path, m_filename))
+            banner.mobile_image_url = f'/static/images/{m_filename}'
+            
+        db.session.commit()
+        flash('Banner atualizado com sucesso!', 'success')
+        return redirect(url_for('admin.banners'))
+    return render_template('admin/banners/form.html', banner=banner)
 
 @admin_bp.route('/banners/delete/<int:id>')
 @login_required
@@ -284,7 +338,40 @@ def storytelling_edit(id):
         return redirect(url_for('admin.storytelling'))
     return render_template('admin/storytelling/form.html', item=item)
 
-# ORDERS & CLIENTS
+# POPUP MANAGEMENT
+@admin_bp.route('/popup', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def popup_config():
+    config = PopupConfig.query.first()
+    if not config:
+        config = PopupConfig()
+        db.session.add(config)
+        db.session.commit()
+        
+    if request.method == 'POST':
+        config.title = request.form.get('title')
+        config.subtitle = request.form.get('subtitle')
+        config.discount_text = request.form.get('discount_text')
+        config.button_text = request.form.get('button_text')
+        config.is_active = 'is_active' in request.form
+        config.delay_seconds = request.form.get('delay_seconds', 3)
+        
+        file = request.files.get('image')
+        if file and file.filename:
+            filename = secure_filename(file.filename)
+            img_path = os.path.join(current_app.root_path, 'static/images')
+            if not os.path.exists(img_path): os.makedirs(img_path)
+            file.save(os.path.join(img_path, filename))
+            config.image_url = f'/static/images/{filename}'
+            
+        db.session.commit()
+        flash('Configuração do popup atualizada!', 'success')
+        return redirect(url_for('admin.popup_config'))
+        
+    return render_template('admin/popup/form.html', config=config)
+
+# ORDERS
 @admin_bp.route('/orders')
 @login_required
 @admin_required
@@ -292,9 +379,27 @@ def orders():
     all_orders = Order.query.order_by(Order.created_at.desc()).all()
     return render_template('admin/orders/index.html', orders=all_orders)
 
+@admin_bp.route('/orders/<int:id>')
+@login_required
+@admin_required
+def order_detail(id):
+    order = Order.query.get_or_404(id)
+    return render_template('admin/orders/detail.html', order=order)
+
+# CLIENTS
 @admin_bp.route('/clients')
 @login_required
 @admin_required
 def clients():
     all_users = User.query.all()
     return render_template('admin/clients/index.html', users=all_users)
+
+@admin_bp.route('/clients/<int:id>/history')
+@login_required
+@admin_required
+def client_history(id):
+    user = User.query.get_or_404(id)
+    from decimal import Decimal
+    orders = Order.query.filter_by(user_id=id).order_by(Order.created_at.desc()).all()
+    total_spent = sum((o.total_amount for o in orders), Decimal('0.00'))
+    return render_template('admin/clients/history.html', user=user, orders=orders, total_spent=total_spent)

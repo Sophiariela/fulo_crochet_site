@@ -33,7 +33,9 @@ class Product(db.Model, TimestampMixin):
     sizes = db.Column(db.String(100))
     is_active = db.Column(db.Boolean, default=True)
     is_featured = db.Column(db.Boolean, default=False)
+    is_accompanied = db.Column(db.Boolean, default=False)
     technical_details = db.Column(db.Text) # JSON or markdown string
+    shipping_and_returns = db.Column(db.Text)
     
     # Relationships
     cart_items = db.relationship('CartItem', backref='product', lazy=True)

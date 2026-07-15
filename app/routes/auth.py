@@ -11,7 +11,7 @@ auth_bp.strict_slashes = False
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('public.index'))
+        return redirect(url_for('public.home'))
 
     if request.method == 'POST':
         name = request.form.get('name')
@@ -32,12 +32,15 @@ def register():
 
     return render_template('auth/register.html')
 
+from werkzeug.security import check_password_hash
+from flask_login import login_user, logout_user, login_required, current_user
+
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
         if current_user.is_admin:
             return redirect(url_for('admin.dashboard'))
-        return redirect(url_for('public.index'))
+        return redirect(url_for('public.home'))
 
     if request.method == 'POST':
         email = request.form.get('email')
@@ -45,17 +48,22 @@ def login():
         remember = True if request.form.get('remember') else False
 
         user = User.query.filter_by(email=email).first()
+
         if user and user.check_password(password):
             login_user(user, remember=remember)
+            
+            flash('Login realizado com sucesso!', 'success')
+            
+            # Redirect to next page or default
+            next_page = request.args.get('next')
+            if next_page:
+                return redirect(next_page)
+                
             if user.is_admin:
                 return redirect(url_for('admin.dashboard'))
-            
-            from app.services.cart_service import CartService
-            CartService.sync_cart_on_login(user)
-            return redirect(url_for('public.index'))
+            return redirect(url_for('public.home'))
 
-        flash('Email ou senha incorretos.', 'danger')
-        return redirect(url_for('auth.login'))
+        flash('Email ou senha inválidos', 'danger')
 
     return render_template('auth/login.html')
 
@@ -63,7 +71,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('public.index'))
+    return redirect(url_for('public.home'))
 
 @auth_bp.route('/account')
 @login_required

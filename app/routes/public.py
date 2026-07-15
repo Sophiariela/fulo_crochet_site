@@ -2,14 +2,15 @@ from flask import Blueprint, render_template, request, jsonify, flash, redirect,
 from app.models.product import Product, Category
 from app.models.cms import Banner, Storytelling, NewsletterSubscriber
 from app import db
+from decimal import Decimal
 
 public_bp = Blueprint("public", __name__)
 
 @public_bp.route("/")
 def home():
-    banners = Banner.query.filter_by(is_active=True).order_by(Banner.order).all()
-    featured_products = Product.query.filter_by(is_active=True, is_featured=True).limit(8).all()
-    storytelling_sections = Storytelling.query.filter_by(is_visible=True).all()
+    banners = Banner.query.filter_by(is_active=True).order_by(Banner.order).all() or []
+    featured_products = Product.query.filter_by(is_active=True, is_featured=True).limit(8).all() or []
+    storytelling_sections = Storytelling.query.filter_by(is_visible=True).all() or []
     
     # Categorize products for specialized sections like "Lançamentos"
     new_arrivals = Product.query.filter_by(is_active=True, collection="Lançamentos").limit(4).all()
@@ -51,11 +52,15 @@ def shop():
 @public_bp.route("/collections")
 def collections():
     categories = Category.query.all()
-    collections_data = {}
+    collections_data = []
     for cat in categories:
         products = Product.query.filter_by(category_id=cat.id, is_active=True).limit(4).all()
         if products:
-            collections_data[cat.name] = products
+            collections_data.append({
+                'name': cat.name,
+                'slug': cat.slug,
+                'products': products
+            })
                 
     return render_template("public/collections.html", collections=collections_data)
 
@@ -101,6 +106,20 @@ def search():
         collections=[c[0] for c in collections if c[0]]
     )
 
+@public_bp.route("/termos-de-uso")
+def termos_de_uso():
+    return render_template("public/page.html", title="Termos de Uso", content="""
+        <div class='content-section' style='line-height: 1.8; color: var(--muted);'>
+            <p style='margin-bottom: 20px;'>Ao acessar este website, o usuário concorda com os presentes Termos de Uso.</p>
+            <p style='margin-bottom: 20px;'>Os serviços, produtos e conteúdos disponibilizados neste site destinam-se exclusivamente a fins informativos e comerciais relacionados à marca.</p>
+            <p style='margin-bottom: 20px;'>O usuário compromete-se a utilizar o website de forma lícita, respeitando todas as legislações aplicáveis.</p>
+            <p style='margin-bottom: 20px;'>É proibida a reprodução, cópia, distribuição ou utilização indevida dos conteúdos disponibilizados sem autorização prévia.</p>
+            <p style='margin-bottom: 20px;'>A empresa poderá atualizar estes Termos de Uso a qualquer momento, sem aviso prévio.</p>
+            <p style='margin-bottom: 20px;'>Em caso de dúvidas, o usuário poderá entrar em contato pelos canais oficiais disponibilizados neste website.</p>
+            <p style='margin-top: 40px; font-size: 0.9rem;'>Última atualização: Julho de 2026.</p>
+        </div>
+    """)
+
 @public_bp.route("/politica-de-privacidade")
 def privacy_policy():
     return render_template("public/page.html", title="Política de Privacidade", content="""
@@ -109,15 +128,6 @@ def privacy_policy():
             <p style='margin-bottom: 20px;'>Solicitamos informações pessoais apenas quando realmente precisamos delas para lhe fornecer um serviço. Fazemo-lo por meios justos e legais, com o seu conhecimento e consentimento. Também informamos por que estamos coletando e como será usado.</p>
             <p style='margin-bottom: 20px;'>Apenas retemos as informações coletadas pelo tempo necessário para fornecer o serviço solicitado. Quando armazenamos dados, protegemos dentro de meios comercialmente aceitáveis para evitar perdas e roubos, bem como acesso, divulgação, cópia, uso ou modificação não autorizados.</p>
             <p style='margin-bottom: 20px;'>Não compartilhamos informações de identificação pessoal publicamente ou com terceiros, exceto quando exigido por lei.</p>
-        </div>
-    """)
-
-@public_bp.route("/termos-de-uso")
-def terms_of_use():
-    return render_template("public/page.html", title="Termos de Uso", content="""
-        <div class='content-section' style='line-height: 1.8; color: var(--muted);'>
-            <p style='margin-bottom: 20px;'>Ao acessar ao site FULÔ, concorda em cumprir estes termos de serviço, todas as leis e regulamentos aplicáveis e concorda que é responsável pelo cumprimento de todas as leis locais aplicáveis.</p>
-            <p style='margin-bottom: 20px;'>Se você não concordar com algum destes termos, está proibido de usar ou acessar este site. Os materiais contidos neste site são protegidos pelas leis de direitos autorais e marcas comerciais aplicáveis.</p>
         </div>
     """)
 
@@ -186,24 +196,38 @@ def trocas():
             </ul>
             
             <h4 style='color: var(--text); margin-top: 30px; margin-bottom: 10px;'>Como solicitar?</h4>
-            <p>Envie uma mensagem para o nosso WhatsApp <strong>(11) 98765-4321</strong> ou e-mail <strong>contato@fulodesign.com.br</strong> com o número do seu pedido e o motivo da solicitação.</p>
+            <p>Envie uma mensagem para o nosso e-mail <strong><a href='mailto:bastosjeniffer46@gmail.com' style='color: var(--accent);'>bastosjeniffer46@gmail.com</a></strong> ou telefone <strong><a href='tel:+5571986946669' style='color: var(--accent);'>+55 71 98694-6669</a></strong> com o número do seu pedido e o motivo da solicitação.</p>
         </div>
     """)
 
 @public_bp.route("/contato")
 def contato():
-    return render_template("public/page.html", title="Contato", content="""
+    return render_template("public/page.html", title="Fale Conosco", content="""
         <p>Estamos à disposição para tirar suas dúvidas e ouvir suas sugestões.</p>
-        <p><strong>WhatsApp:</strong> (11) 98765-4321</p>
-        <p><strong>E-mail:</strong> contato@fulodesign.com.br</p>
-        <p><strong>Horário de Atendimento:</strong> Segunda a Sexta, das 09h às 18h.</p>
     """)
 
 @public_bp.route("/shipping/<zip_code>")
 def get_shipping(zip_code):
     from app.services.checkout_service import CheckoutService
-    cost = CheckoutService.calculate_shipping(zip_code)
-    return jsonify({'cost': float(cost)})
+    from app.services.cart_service import CartService
+    from flask_login import current_user
+    
+    subtotal = request.args.get('subtotal')
+    if subtotal:
+        try:
+            subtotal = Decimal(subtotal)
+        except:
+            subtotal = Decimal('0.00')
+    elif current_user.is_authenticated:
+        _, subtotal = CartService.get_cart_data(current_user)
+    else:
+        subtotal = Decimal('0.00')
+        
+    res = CheckoutService.calculate_shipping(zip_code, subtotal)
+    
+    # Format decimals for JSON
+    res['cost'] = float(res['cost'])
+    return jsonify(res)
 
 @public_bp.route("/storytelling")
 def storytelling():

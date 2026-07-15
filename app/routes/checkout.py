@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app
+from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app, jsonify
 from flask_login import current_user, login_required
 from app.services.cart_service import CartService
 from app.services.checkout_service import CheckoutService
@@ -17,7 +17,9 @@ def index():
         return redirect(url_for('cart.index'))
     
     addresses = Address.query.filter_by(user_id=current_user.id).all()
-    shipping_cost = CheckoutService.calculate_shipping(None) # Default
+    # Pass subtotal to check for free shipping
+    shipping_res = CheckoutService.calculate_shipping(None, subtotal)
+    shipping_cost = shipping_res['cost']
     total = Decimal(str(subtotal)) + shipping_cost
     
     return render_template('checkout/index.html', 
@@ -27,10 +29,34 @@ def index():
                            shipping_cost=shipping_cost, 
                            total=total)
 
+@checkout_bp.route('/validate_coupon', methods=['POST'])
+@login_required
+def validate_coupon():
+    code = request.form.get('code')
+    _, subtotal = CartService.get_cart_data(current_user)
+    
+    coupon, discount = CheckoutService.validate_coupon(code, Decimal(str(subtotal)))
+    
+    if coupon:
+        return jsonify({
+            'status': 'success',
+            'discount': float(discount),
+            'coupon_id': coupon.id,
+            'message': f'Cupom {coupon.code} aplicado!'
+        })
+    else:
+        return jsonify({
+            'status': 'error',
+            'message': discount # discount contains error message when coupon is None
+        })
+
 @checkout_bp.route('/process', methods=['POST'])
 @login_required
 def process():
     address_id = request.form.get('address_id')
+    coupon_id = request.form.get('coupon_id')
+    discount_amount = Decimal(request.form.get('discount_amount', '0.00'))
+    zip_code = request.form.get('zip_code') # For shipping calculation
     
     if not address_id:
         # Handle new address creation here if needed
@@ -57,9 +83,23 @@ def process():
         db.session.add(new_address)
         db.session.commit()
         address_id = new_address.id
+    else:
+        # Get zip_code from existing address if not provided
+        addr = Address.query.get(address_id)
+        if addr:
+            zip_code = addr.zip_code
 
-    shipping_cost = CheckoutService.calculate_shipping(None)
-    order, error = CheckoutService.create_order(current_user, address_id, shipping_cost)
+    _, subtotal = CartService.get_cart_data(current_user)
+    shipping_res = CheckoutService.calculate_shipping(zip_code, subtotal)
+    shipping_cost = shipping_res['cost']
+    
+    order, error = CheckoutService.create_order(
+        current_user, 
+        address_id, 
+        shipping_cost, 
+        coupon_id=coupon_id if coupon_id else None, 
+        discount_amount=discount_amount
+    )
     
     if error:
         flash(error, 'danger')
@@ -75,7 +115,7 @@ def payment(order_id):
     order = Order.query.get_or_404(order_id)
     
     if order.user_id != current_user.id:
-        return redirect(url_for('public.index'))
+        return redirect(url_for('index'))
     
     # Create Preference for Card and SDK data for PIX
     preference = PaymentService.create_preference(order)

@@ -1,11 +1,11 @@
 {% extends "admin/base_admin.html" %}
 
-{% block title %}Banners{% endblock %}
+{% block title %}Gerenciar Banners{% endblock %}
 
 {% block content %}
 <div class="header-actions">
     <h2>Banners da Homepage</h2>
-    <a href="{{ url_for('admin.banner_add') }}" class="btn btn-primary">Adicionar Novo</a>
+    <a href="{{ url_for('admin.banner_add') }}" class="btn btn-primary">+ Novo Banner</a>
 </div>
 
 <div class="card">
@@ -13,7 +13,7 @@
         <thead>
             <tr>
                 <th>Ordem</th>
-                <th>Imagem</th>
+                <th>Preview</th>
                 <th>Título</th>
                 <th>Link</th>
                 <th>Status</th>
@@ -25,23 +25,28 @@
             <tr>
                 <td>{{ banner.order }}</td>
                 <td>
-                    <img src="{{ banner.image_url }}" alt="" style="width: 120px; height: 60px; object-fit: cover; border-radius: 4px;">
+                    <img src="{{ banner.image_url }}" alt="" style="height: 50px; border-radius: 4px; object-fit: cover;">
                 </td>
                 <td>
                     <strong>{{ banner.title }}</strong><br>
-                    <small style="color: var(--muted);">{{ banner.subtitle or '' }}</small>
+                    <small style="color: var(--muted)">{{ banner.subtitle }}</small>
                 </td>
-                <td>{{ banner.link_url or '-' }}</td>
+                <td><small>{{ banner.link_url or 'N/A' }}</small></td>
                 <td>
                     {% if banner.is_active %}
-                    <span class="badge badge-success">Ativo</span>
+                        <span class="badge badge-success">Ativo</span>
                     {% else %}
-                    <span class="badge">Inativo</span>
+                        <span class="badge" style="background: #eee; color: #666;">Inativo</span>
                     {% endif %}
                 </td>
                 <td>
-                    <a href="{{ url_for('admin.banner_delete', id=banner.id) }}" class="btn btn-danger" onclick="return confirm('Tem certeza?')" style="padding: 5px 10px; font-size: 0.75rem;">Excluir</a>
+                    <a href="{{ url_for('admin.banner_edit', id=banner.id) }}" class="btn btn-outline" style="padding: 5px 10px;">Editar</a>
+                    <a href="{{ url_for('admin.banner_delete', id=banner.id) }}" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir este banner?')" style="padding: 5px 10px;">Excluir</a>
                 </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 40px; color: var(--muted);">Nenhum banner cadastrado.</td>
             </tr>
             {% endfor %}
         </tbody>

@@ -1,0 +1,75 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Configurar Popup{% endblock %}
+
+{% block content %}
+<div class="header-actions">
+    <h2>Configuração do Popup Promocional</h2>
+    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline">Voltar</a>
+</div>
+
+<form action="{{ url_for('admin.popup_config') }}" method="POST" enctype="multipart/form-data">
+    <div class="card">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+            <div class="left-col">
+                <div class="form-group" style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+                    <label style="display: flex; align-items: center; cursor: pointer; gap: 12px; margin: 0;">
+                        <input type="checkbox" name="is_active" style="width: 20px; height: 20px;" {{ 'checked' if config.is_active else '' }}>
+                        <span style="font-weight: 600; font-size: 1rem;">Popup Habilitado</span>
+                    </label>
+                    <p style="font-size: 0.8rem; color: var(--muted); margin-top: 10px; margin-left: 32px;">
+                        Quando habilitado, o popup aparecerá para novos visitantes após o tempo definido.
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <label>Título do Popup</label>
+                    <input type="text" name="title" value="{{ config.title or '' }}" placeholder="Ex: Ganhe 10% de desconto!">
+                </div>
+
+                <div class="form-group">
+                    <label>Subtítulo / Descrição</label>
+                    <input type="text" name="subtitle" value="{{ config.subtitle or '' }}" placeholder="Ex: Inscreva-se na nossa newsletter e receba seu cupom.">
+                </div>
+
+                <div class="form-group">
+                    <label>Texto de Destaque (Desconto)</label>
+                    <input type="text" name="discount_text" value="{{ config.discount_text or '' }}" placeholder="Ex: 10% OFF">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="form-group">
+                        <label>Texto do Botão</label>
+                        <input type="text" name="button_text" value="{{ config.button_text or '' }}" placeholder="Ex: Quero meu desconto">
+                    </div>
+                    <div class="form-group">
+                        <label>Delay para exibir (segundos)</label>
+                        <input type="number" name="delay_seconds" value="{{ config.delay_seconds or 3 }}" min="0">
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-col">
+                <div class="form-group">
+                    <label>Imagem do Popup (Recomendado: 800x800px)</label>
+                    {% if config.image_url %}
+                    <div style="margin-bottom: 15px; position: relative; border-radius: 8px; overflow: hidden; border: 1px solid var(--border);">
+                        <img src="{{ config.image_url }}" style="width: 100%; display: block;">
+                    </div>
+                    {% endif %}
+                    <input type="file" name="image" accept="image/*">
+                </div>
+
+                <div class="preview-box" style="margin-top: 30px; padding: 20px; border: 1px dashed var(--border); border-radius: 8px;">
+                    <h4 style="margin-bottom: 10px; font-size: 0.9rem; color: var(--muted);">Dica de Uso</h4>
+                    <p style="font-size: 0.85rem; line-height: 1.5;">O popup é uma ótima ferramenta para capturar e-mails. Certifique-se de que a imagem seja atraente e que o desconto seja o foco principal.</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 40px; padding-top: 30px; border-top: 1px solid var(--border); text-align: right;">
+            <button type="submit" class="btn btn-primary" style="padding: 15px 60px; font-size: 1rem;">Salvar Configurações</button>
+        </div>
+    </div>
+</form>
+{% endblock %}

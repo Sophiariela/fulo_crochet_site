@@ -295,13 +295,204 @@
         
         .fade-in { animation: fadeIn 1s cubic-bezier(0.19, 1, 0.22, 1) forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* SEARCH SYSTEM */
+        .search-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 2500;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            pointer-events: none;
+        }
+        .search-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: all;
+        }
+
+        .search-panel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #fff;
+            z-index: 2501;
+            padding: 60px 0;
+            transform: translateY(-100%);
+            transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.05);
+            border-bottom: 1px solid var(--border);
+        }
+        .search-panel.active {
+            transform: translateY(0);
+        }
+
+        .search-container {
+            width: min(1000px, 92%);
+            margin: 0 auto;
+        }
+
+        .search-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .search-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--muted);
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input {
+            width: 100%;
+            font-size: 3.5rem;
+            font-family: 'Cormorant Garamond', serif;
+            border: none;
+            border-bottom: 1px solid var(--border);
+            padding: 0 0 20px 0;
+            outline: none;
+            background: transparent !important;
+            color: #111 !important;
+            border-radius: 0;
+            caret-color: #111;
+        }
+
+        .search-input::placeholder {
+            color: #d1d1d1;
+            font-style: italic;
+            font-weight: 300;
+        }
+
+        .search-input:focus {
+            border-bottom-color: var(--text);
+        }
+
+        .search-submit {
+            position: absolute;
+            right: 0;
+            bottom: 25px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text);
+            transition: var(--transition);
+        }
+        .search-submit:hover { transform: scale(1.1); }
+
+        .search-suggestions {
+            margin-top: 40px;
+            display: flex;
+            gap: 25px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .suggestion-label {
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        .suggestion-link {
+            font-size: 0.85rem;
+            color: var(--text);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: var(--transition);
+        }
+
+        .suggestion-link:hover {
+            border-bottom-color: var(--text);
+        }
+
+        .search-close-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text);
+            padding: 5px;
+            transition: var(--transition);
+        }
+        .search-close-btn:hover { opacity: 0.5; }
+
+        @media (max-width: 768px) {
+            .search-input { font-size: 2rem; }
+            .search-panel { padding: 40px 0; }
+            .search-header { margin-bottom: 25px; }
+        }
+
+        /* POPUP */
+        .popup-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+            backdrop-filter: blur(5px);
+        }
+        .popup-overlay.active { opacity: 1; visibility: visible; }
+        .popup-content {
+            background: var(--bg);
+            width: min(900px, 90%);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            position: relative;
+            transform: scale(0.9);
+            transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+            overflow: hidden;
+            box-shadow: 0 20px 80px rgba(0,0,0,0.3);
+        }
+        .popup-overlay.active .popup-content { transform: scale(1); }
+        .popup-img-wrapper { width: 100%; height: 100%; overflow: hidden; }
+        .popup-img { width: 100%; height: 100%; object-fit: cover; }
+        .popup-text { padding: 60px 40px; display: flex; flex-direction: column; justify-content: center; text-align: center; }
+        .popup-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.8);
+            border: none;
+            cursor: pointer;
+            z-index: 10;
+            color: var(--text);
+            transition: var(--transition);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        .popup-close:hover { background: #fff; transform: rotate(90deg); }
+        @media (max-width: 768px) {
+            .popup-content { grid-template-columns: 1fr; }
+            .popup-img-wrapper { display: none; }
+            .popup-text { padding: 40px 20px; }
+        }
     </style>
     {% block extra_css %}{% endblock %}
 </head>
 <body>
 
     <div class="top-bar">
-        Enviamos para todo o Brasil • Frete grátis em compras acima de R$ 400
+        Enviamos para todo o Brasil • Frete grátis em compras acima de R$ 499
     </div>
 
     <header id="mainHeader">
@@ -333,46 +524,35 @@
     </header>
 
     <div class="menu-overlay" id="menuOverlay"></div>
-    <div class="menu-overlay" id="searchOverlay" style="z-index: 2500;"></div>
+    <div class="search-overlay" id="searchOverlay"></div>
     
     <!-- SEARCH PANEL -->
-    <div id="searchPanel" style="
-        position: fixed;
-        top: -100%;
-        left: 0;
-        width: 100%;
-        background: var(--bg);
-        z-index: 2501;
-        padding: 60px 0;
-        transition: var(--transition);
-        box-shadow: 0 10px 50px rgba(0,0,0,0.1);
-    ">
-        <div class="container">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px;">
-                <span class="label">O que você procura?</span>
-                <button class="icon-btn" id="closeSearch">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    <div id="searchPanel" class="search-panel">
+        <div class="search-container">
+            <div class="search-header">
+                <span class="search-label">O que você procura?</span>
+                <button class="search-close-btn" id="closeSearch" aria-label="Fechar busca">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
             </div>
             <form action="{{ url_for('public.search') }}" method="GET">
-                <input type="text" name="q" placeholder="Ex: Vestido, Top, Azul..." style="
-                    width: 100%;
-                    font-size: 3rem;
-                    font-family: 'Cormorant Garamond', serif;
-                    border: none;
-                    background: transparent;
-                    border-bottom: 1px solid var(--border);
-                    padding-bottom: 20px;
-                    outline: none;
-                ">
+                <div class="search-input-wrapper">
+                    <input type="text" name="q" class="search-input" placeholder="Pesquisar produtos..." autocomplete="off">
+                    <button type="submit" class="search-submit" aria-label="Pesquisar">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </button>
+                </div>
             </form>
+            <div class="search-suggestions">
+                <span class="suggestion-label">Tendências:</span>
+                <a href="{{ url_for('public.search', q='vestido') }}" class="suggestion-link">Vestidos</a>
+                <a href="{{ url_for('public.search', q='top') }}" class="suggestion-link">Tops</a>
+                <a href="{{ url_for('public.search', q='biquini') }}" class="suggestion-link">Biquínis</a>
+                <a href="{{ url_for('public.search', q='croche') }}" class="suggestion-link">Artesanal</a>
+            </div>
         </div>
     </div>
 
-    <style>
-        #searchPanel.active { top: 0; }
-        #searchOverlay.active { opacity: 1; visibility: visible; }
-    </style>
     
     <!-- MOBILE MENU -->
     <div class="menu-panel" id="menuPanel">
@@ -396,8 +576,8 @@
         </nav>
         <div class="menu-footer">
             <div style="display: flex; gap: 20px;">
-                <a href="https://instagram.com/fulodesign" target="_blank" class="label" style="margin-bottom: 0;">Instagram</a>
-                <a href="https://tiktok.com/@fulodesign" target="_blank" class="label" style="margin-bottom: 0;">TikTok</a>
+                <a href="https://www.instagram.com/fulocrochet_" target="_blank" class="label" style="margin-bottom: 0;">Instagram</a>
+                <a href="https://www.tiktok.com/fulocrochet_" target="_blank" class="label" style="margin-bottom: 0;">TikTok</a>
             </div>
         </div>
     </div>
@@ -443,57 +623,84 @@
         {% block content %}{% endblock %}
     </main>
 
+    <!-- POPUP -->
+    {% if popup_config and popup_config.is_active %}
+    <div class="popup-overlay" id="promoPopup">
+        <div class="popup-content">
+            <button class="popup-close" id="closePopup" aria-label="Fechar popup">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+            <div class="popup-img-wrapper">
+                <img src="{{ popup_config.image_url }}" alt="Promoção" class="popup-img">
+            </div>
+            <div class="popup-text">
+                <span class="label">{{ popup_config.subtitle }}</span>
+                <h2 style="font-size: 2.5rem; margin-bottom: 20px;">{{ popup_config.title }}</h2>
+                {% if popup_config.discount_text %}
+                <div style="font-size: 1.5rem; font-weight: 600; color: var(--accent); margin-bottom: 30px;">{{ popup_config.discount_text }}</div>
+                {% endif %}
+                
+                <form id="popupNewsletter" class="newsletter-form" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+                    <input type="email" id="popupEmail" placeholder="Seu melhor e-mail" required style="border: 1px solid var(--border); padding: 12px 15px; width: 100%;">
+                    <button type="submit" class="btn btn-accent btn-full">{{ popup_config.button_text }}</button>
+                </form>
+                <p id="popupMessage" style="font-size: 0.75rem; margin-bottom: 15px; display: none;"></p>
+                <p style="font-size: 0.7rem; color: var(--muted);">*Ao se inscrever você aceita nossa política de privacidade.</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
     <footer>
         <div class="container">
             <div class="footer-grid">
-                <div>
+                <div style="padding-right: 40px;">
                     <div class="footer-brand">FULÔ</div>
-                    <p style="color: var(--muted); max-width: 300px; font-weight: 300; font-size: 0.95rem; margin-bottom: 30px;">Crochê autoral brasileiro. Feito para durar gerações com afeto e técnica.</p>
+                    <p style="color: var(--muted); max-width: 320px; font-weight: 300; font-size: 0.95rem; margin-bottom: 30px; line-height: 1.8;">
+                        Crochê autoral brasileiro. Peças únicas feitas à mão com design contemporâneo e alma artesanal. Cada ponto carrega história e afeto.
+                    </p>
                     
-                    <h4>Newsletter</h4>
+                    <h4 style="margin-bottom: 20px;">Newsletter</h4>
                     <form class="newsletter-form" id="newsletterForm">
-                        <input type="email" name="email" id="newsletterEmail" placeholder="Seu e-mail" required>
-                        <button type="submit">OK</button>
+                        <input type="email" name="email" id="newsletterEmail" placeholder="Seu melhor e-mail" required style="border-radius: 0;">
+                        <button type="submit" style="border-radius: 0;">Inscrever</button>
                     </form>
-                    <p id="newsletterMessage" style="font-size: 0.75rem; margin-top: 5px; display: none;"></p>
+                    <p id="newsletterMessage" style="font-size: 0.75rem; margin-top: 10px; display: none;"></p>
                 </div>
                 <div class="footer-links">
-                    <h4>Explorar</h4>
+                    <h4>Shop</h4>
                     <a href="{{ url_for('public.shop') }}">Shop All</a>
-                    <a href="{{ url_for('public.shop', collection='Brasilidade') }}">Brasilidade</a>
+                    <a href="{{ url_for('public.shop', collection='Brasilidade') }}">Coleção Brasilidade</a>
                     <a href="{{ url_for('public.shop', collection='Lançamentos') }}">Lançamentos</a>
-                    <a href="{{ url_for('public.contato') }}">Contato</a>
+                    <a href="{{ url_for('public.storytelling') }}">Nossa História</a>
                 </div>
                 <div class="footer-links">
-                    <h4>Suporte</h4>
-                    <a href="{{ url_for('public.faq') }}">FAQ</a>
+                    <h4>Ajuda</h4>
+                    <a href="{{ url_for('public.faq') }}">Dúvidas Frequentes</a>
                     <a href="{{ url_for('public.envios') }}">Envios & Prazos</a>
                     <a href="{{ url_for('public.trocas') }}">Trocas & Devoluções</a>
-                    <a href="{{ url_for('public.privacy_policy') }}">Política de Privacidade</a>
-                    <a href="{{ url_for('public.terms_of_use') }}">Termos de Uso</a>
+                    <a href="{{ url_for('public.contato') }}">Fale Conosco</a>
                 </div>
                 <div class="footer-links">
-                    <h4>Pagamento</h4>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
-                        <span style="border: 1px solid var(--border); padding: 4px 8px; font-size: 0.7rem; font-weight: 600; border-radius: 3px;">PIX</span>
-                        <span style="border: 1px solid var(--border); padding: 4px 8px; font-size: 0.7rem; font-weight: 600; border-radius: 3px;">VISA</span>
-                        <span style="border: 1px solid var(--border); padding: 4px 8px; font-size: 0.7rem; font-weight: 600; border-radius: 3px;">MASTERCARD</span>
-                        <span style="border: 1px solid var(--border); padding: 4px 8px; font-size: 0.7rem; font-weight: 600; border-radius: 3px;">ELO</span>
-                    </div>
-                </div>
-                <div class="footer-links">
-                    <h4>Social</h4>
-                    <a href="https://instagram.com/fulodesign" target="_blank" rel="noopener noreferrer">Instagram</a>
-                    <a href="https://pinterest.com/fulodesign" target="_blank" rel="noopener noreferrer">Pinterest</a>
-                    <a href="https://tiktok.com/@fulodesign" target="_blank" rel="noopener noreferrer">TikTok</a>
-                    <a href="https://wa.me/5500000000000" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+                    <h4>Social & Legal</h4>
+                    <a href="https://www.instagram.com/fulocrochet_" target="_blank" rel="noopener noreferrer">Instagram</a>
+                    <a href="https://www.tiktok.com/@fulocrochet_" target="_blank" rel="noopener noreferrer">TikTok</a>
+                    <a href="{{ url_for('public.privacy_policy') }}">Privacidade</a>
+                    <a href="{{ url_for('public.termos_de_uso') }}">Termos de Uso</a>
                 </div>
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; 2026 FULÔ DESIGN. Todos os direitos reservados.</p>
-                <p>Desenvolvido por <a href="https://instagram.com/asterhq_" target="_blank" style="color: var(--text); font-weight: 600; text-decoration: underline;">@asterhq_</a></p>
-                <p>Mãos que criam, alma que veste.</p>
+                <p>&copy; 2026 FULÔ DESIGN. Feito à mão no Brasil.</p>
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <span style="font-size: 0.7rem; letter-spacing: 0.1em; color: var(--muted);">PAGAMENTO SEGURO</span>
+                    <div style="display: flex; gap: 8px;">
+                        <img src="https://img.icons8.com/color/32/000000/visa.png" alt="Visa" style="height: 20px; width: auto; opacity: 0.7;">
+                        <img src="https://img.icons8.com/color/32/000000/mastercard.png" alt="Mastercard" style="height: 20px; width: auto; opacity: 0.7;">
+                        <img src="https://img.icons8.com/color/32/000000/pix.png" alt="Pix" style="height: 20px; width: auto; opacity: 0.7;">
+                    </div>
+                </div>
+                <p>By <a href="{{ config.SOCIALS_INSTAGRAM }}" target="_blank" rel="noopener noreferrer" style="color: var(--text); font-weight: 500;">ASTER</a></p>
             </div>
         </div>
     </footer>
@@ -517,56 +724,73 @@
         const searchPanel = document.getElementById('searchPanel');
         const searchOverlay = document.getElementById('searchOverlay');
 
-        openSearch.addEventListener('click', () => {
-            searchOverlay.classList.add('active');
-            searchPanel.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            setTimeout(() => searchPanel.querySelector('input').focus(), 400);
+        const toggleSearch = () => {
+            if (!searchPanel || !searchOverlay) return;
+            searchOverlay.classList.toggle('active');
+            searchPanel.classList.toggle('active');
+            
+            const isActive = searchPanel.classList.contains('active');
+            document.body.style.overflow = isActive ? 'hidden' : 'auto';
+            
+            if (isActive) {
+                setTimeout(() => {
+                    const input = searchPanel.querySelector('.search-input');
+                    if (input) input.focus();
+                }, 400);
+            }
+        };
+
+        if (openSearch) openSearch.addEventListener('click', toggleSearch);
+        if (closeSearch) closeSearch.addEventListener('click', toggleSearch);
+        if (searchOverlay) searchOverlay.addEventListener('click', toggleSearch);
+
+        // Escape key to close search
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (searchPanel && searchPanel.classList.contains('active')) toggleSearch();
+                if (menuPanel && menuPanel.classList.contains('active')) hideAll();
+                if (cartDrawer && cartDrawer.classList.contains('active')) hideAll();
+            }
         });
 
-        const hideSearch = () => {
-            searchOverlay.classList.remove('active');
-            searchPanel.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        };
-
-        closeSearch.addEventListener('click', hideSearch);
-        searchOverlay.addEventListener('click', hideSearch);
-
         const hideAll = () => {
-            menuOverlay.classList.remove('active');
-            menuPanel.classList.remove('active');
-            cartDrawer.classList.remove('active');
-            searchOverlay.classList.remove('active');
-            searchPanel.classList.remove('active');
+            if (menuOverlay) menuOverlay.classList.remove('active');
+            if (menuPanel) menuPanel.classList.remove('active');
+            if (cartDrawer) cartDrawer.classList.remove('active');
+            if (searchOverlay) searchOverlay.classList.remove('active');
+            if (searchPanel) searchPanel.classList.remove('active');
             document.body.style.overflow = 'auto';
         };
 
-        openMenu.addEventListener('click', showMenu);
-        closeMenu.addEventListener('click', hideAll);
-        menuOverlay.addEventListener('click', hideAll);
+        if (openMenu) openMenu.addEventListener('click', showMenu);
+        if (closeMenu) closeMenu.addEventListener('click', hideAll);
+        if (menuOverlay) menuOverlay.addEventListener('click', hideAll);
 
         // CART DRAWER LOGIC
         const openCart = document.getElementById('openCart');
         const closeCart = document.getElementById('closeCart');
         const cartDrawer = document.getElementById('cartDrawer');
 
-        openCart.addEventListener('click', () => {
-            menuOverlay.classList.add('active');
-            cartDrawer.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            loadDrawerCart();
-        });
+        if (openCart) {
+            openCart.addEventListener('click', () => {
+                menuOverlay.classList.add('active');
+                cartDrawer.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                loadDrawerCart();
+            });
+        }
 
-        closeCart.addEventListener('click', hideAll);
+        if (closeCart) closeCart.addEventListener('click', hideAll);
 
         // HEADER SCROLL
         window.addEventListener('scroll', () => {
             const header = document.getElementById('mainHeader');
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
+            if (header) {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
             }
         });
 
@@ -575,13 +799,14 @@
             const drawerItems = document.getElementById('drawerCartItems');
             const drawerTotal = document.getElementById('drawerCartTotal');
             const cartCount = document.getElementById('cartCount');
+            if (!drawerItems) return;
             
             try {
                 const response = await fetch('/cart/json');
                 const data = await response.json();
                 
-                cartCount.innerText = data.count;
-                drawerTotal.innerText = `R$ ${data.total.toFixed(2).replace('.', ',')}`;
+                if (cartCount) cartCount.innerText = data.count;
+                if (drawerTotal) drawerTotal.innerText = `R$ ${data.total.toFixed(2).replace('.', ',')}`;
                 
                 if (data.items.length === 0) {
                     drawerItems.innerHTML = '<p style="text-align: center; color: var(--muted); margin-top: 50px;">Seu carrinho está vazio.</p>';
@@ -604,41 +829,86 @@
                 drawerItems.innerHTML = '<p style="text-align: center; color: var(--muted); margin-top: 50px;">Erro ao carregar carrinho.</p>';
             }
         }
-        
-        // Initial count load
-        document.addEventListener('DOMContentLoaded', () => {
-            loadDrawerCart();
-            
-            // NEWSLETTER
-            const newsletterForm = document.getElementById('newsletterForm');
-            if (newsletterForm) {
-                newsletterForm.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    const email = document.getElementById('newsletterEmail').value;
-                    const message = document.getElementById('newsletterMessage');
-                    
-                    try {
-                        const response = await fetch('{{ url_for("public.newsletter_signup") }}', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                            body: `email=${encodeURIComponent(email)}`
-                        });
-                        const data = await response.json();
-                        
-                        message.innerText = data.message;
-                        message.style.display = 'block';
-                        message.style.color = data.status === 'success' ? '#27ae60' : '#e74c3c';
-                        
-                        if (data.status === 'success') {
-                            document.getElementById('newsletterEmail').value = '';
+
+        // NEWSLETTER LOGIC
+        const setupNewsletter = (formId, emailId, messageId) => {
+            const form = document.getElementById(formId);
+            if (!form) return;
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById(emailId).value;
+                const message = document.getElementById(messageId);
+                
+                try {
+                    const response = await fetch('/newsletter', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: `email=${encodeURIComponent(email)}`
+                    });
+                    const data = await response.json();
+                    message.innerText = data.message;
+                    message.style.display = 'block';
+                    message.style.color = data.status === 'success' ? '#27ae60' : '#e74c3c';
+                    if (data.status === 'success') {
+                        form.reset();
+                        if (formId === 'popupNewsletter') {
+                            setTimeout(() => {
+                                document.getElementById('promoPopup').classList.remove('active');
+                                document.body.style.overflow = 'auto';
+                                localStorage.setItem('popupShown', 'true');
+                            }, 2000);
                         }
-                    } catch (error) {
-                        console.error('Newsletter error:', error);
                     }
+                } catch (error) {
+                    console.error("Newsletter error:", error);
+                }
+            });
+        };
+
+        // POPUP LOGIC
+        {% if popup_config and popup_config.is_active %}
+        const initPopup = () => {
+            const closePopupFn = () => {
+                var popup = document.getElementById('promoPopup');
+                if (popup) popup.classList.remove('active');
+                document.body.style.overflow = 'auto';
+                localStorage.setItem('popupShown', 'true');
+            };
+
+            setTimeout(() => {
+                if (!localStorage.getItem('popupShown')) {
+                    const popup = document.getElementById('promoPopup');
+                    if (popup) {
+                        popup.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                    }
+                }
+            }, {{ (popup_config.delay_seconds or 3) * 1000 }});
+
+            var closePopupBtn = document.getElementById('closePopup');
+            if (closePopupBtn) {
+                closePopupBtn.addEventListener('click', closePopupFn);
+            }
+
+            var popupOverlay = document.getElementById('promoPopup');
+            if (popupOverlay) {
+                popupOverlay.addEventListener('click', function(e) {
+                    if (e.target === popupOverlay) closePopupFn();
                 });
             }
+        };
+        {% endif %}
+
+        // Initial count load & Setup
+        document.addEventListener('DOMContentLoaded', () => {
+            loadDrawerCart();
+            setupNewsletter('newsletterForm', 'newsletterEmail', 'newsletterMessage');
+            setupNewsletter('popupNewsletter', 'popupEmail', 'popupMessage');
+            {% if popup_config and popup_config.is_active %}
+            initPopup();
+            {% endif %}
         });
     </script>
-    {% block extra_js %}{% endblock %}
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

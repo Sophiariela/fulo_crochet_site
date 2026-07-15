@@ -55,7 +55,7 @@
             </thead>
             <tbody>
                 {% for order in recent_orders %}
-                <tr>
+                <tr onclick="window.location='{{ url_for('admin.order_detail', id=order.id) }}'" style="cursor: pointer;">
                     <td>#{{ order.id }}</td>
                     <td>{{ order.user.name }}</td>
                     <td>{{ order.created_at.strftime('%d/%m/%Y') }}</td>

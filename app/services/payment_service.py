@@ -6,7 +6,11 @@ from app import db
 class PaymentService:
     @staticmethod
     def get_sdk():
-        return mercadopago.SDK(current_app.config['MP_ACCESS_TOKEN'])
+        token = current_app.config.get('MP_ACCESS_TOKEN')
+        if not token or 'YOUR-ACCESS-TOKEN' in token:
+            # Return a mock or handle error
+            print("WARNING: Mercado Pago Access Token not configured correctly.")
+        return mercadopago.SDK(token or "DUMMY_TOKEN")
 
     @staticmethod
     def create_pix_payment(order):
@@ -18,15 +22,19 @@ class PaymentService:
             "payment_method_id": "pix",
             "payer": {
                 "email": order.user.email,
-                "first_name": order.user.name.split()[0],
-                "last_name": order.user.name.split()[-1] if len(order.user.name.split()) > 1 else "",
+                "first_name": order.user.name.split()[0] if order.user.name else "Cliente",
+                "last_name": order.user.name.split()[-1] if order.user.name and len(order.user.name.split()) > 1 else "Fulô",
             },
-            "notification_url": current_app.config['WEBHOOK_URL'],
+            "notification_url": current_app.config.get('WEBHOOK_URL'),
             "external_reference": str(order.id)
         }
         
-        payment_response = sdk.payment().create(payment_data)
-        return payment_response["response"]
+        try:
+            payment_response = sdk.payment().create(payment_data)
+            return payment_response.get("response", {})
+        except Exception as e:
+            print(f"Error creating PIX payment: {e}")
+            return {}
 
     @staticmethod
     def create_preference(order):
@@ -47,26 +55,31 @@ class PaymentService:
             items.append({
                 "title": "Frete",
                 "quantity": 1,
-                "unit_price": shipping_cost
+                "unit_price": round(shipping_cost, 2)
             })
 
+        base_url = current_app.config.get('BASE_URL', '').rstrip('/')
         preference_data = {
             "items": items,
             "payer": {
                 "email": order.user.email
             },
             "back_urls": {
-                "success": f"{current_app.config.get('BASE_URL', '')}/checkout/success/{order.id}",
-                "failure": f"{current_app.config.get('BASE_URL', '')}/checkout/failure",
-                "pending": f"{current_app.config.get('BASE_URL', '')}/checkout/pending"
+                "success": f"{base_url}/checkout/success/{order.id}",
+                "failure": f"{base_url}/checkout/failure",
+                "pending": f"{base_url}/checkout/pending"
             },
             "auto_return": "approved",
-            "notification_url": current_app.config['WEBHOOK_URL'],
+            "notification_url": current_app.config.get('WEBHOOK_URL'),
             "external_reference": str(order.id)
         }
         
-        preference_response = sdk.preference().create(preference_data)
-        return preference_response["response"]
+        try:
+            preference_response = sdk.preference().create(preference_data)
+            return preference_response.get("response", {})
+        except Exception as e:
+            print(f"Error creating preference: {e}")
+            return {}
 
     @staticmethod
     def process_webhook(data):

@@ -3,33 +3,120 @@
 {% block title %}FULÔ | Crochê Contemporâneo{% endblock %}
 
 {% block extra_css %}
-<!-- Swiper CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-
 <style>
-    /* HERO CAROUSEL */
-    .hero-swiper { width: 100%; height: calc(100vh - 140px); min-height: 600px; }
-    .swiper-slide { position: relative; overflow: hidden; }
-    .hero-img { width: 100%; height: 100%; object-fit: cover; transition: transform 8s linear; }
-    .swiper-slide-active .hero-img { transform: scale(1.1); }
-    
+    /* ===== HERO SLIDER ===== */
+    .hero-slider {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        min-height: 600px;
+        overflow: hidden;
+        margin-top: -100px;
+    }
+
+    .hero-slide {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        transition: opacity 1s ease;
+        z-index: 1;
+    }
+    .hero-slide.active {
+        opacity: 1;
+        z-index: 2;
+    }
+
+    .hero-slide picture,
+    .hero-slide img {
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+    .hero-slide img {
+        object-fit: cover;
+        opacity: 0.85;
+        transition: transform 10s ease-out;
+    }
+    .hero-slide.active img {
+        transform: scale(1.1);
+    }
+
     .hero-overlay {
         position: absolute;
         inset: 0;
-        background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.3));
+        z-index: 3;
         display: flex;
-        align-items: center;
+        flex-direction: column;
         justify-content: center;
+        align-items: center;
         text-align: center;
+        background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.2) 100%);
         color: #fff;
-        padding: 20px;
+        padding: 40px;
     }
-    
-    .hero-content { max-width: 800px; opacity: 0; transform: translateY(30px); transition: all 1s ease 0.5s; }
-    .swiper-slide-active .hero-content { opacity: 1; transform: translateY(0); }
-    
-    .hero-content h1 { font-size: clamp(3rem, 10vw, 6rem); margin-bottom: 20px; letter-spacing: -0.02em; }
-    .hero-content p { font-size: 1.2rem; margin-bottom: 40px; font-weight: 300; letter-spacing: 0.05em; }
+
+    .hero-content {
+        max-width: 900px;
+        opacity: 1;
+        transform: translateY(0);
+    }
+    .hero-slide.active .hero-content {
+        animation: heroEntrance 1.2s cubic-bezier(0.19, 1, 0.22, 1) 0.3s both;
+    }
+    @keyframes heroEntrance {
+        from { opacity: 0; transform: translateY(40px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-content h1 {
+        font-size: clamp(3.5rem, 12vw, 7.5rem);
+        margin-bottom: 24px;
+        letter-spacing: -0.03em;
+        font-weight: 300;
+        line-height: 0.9;
+    }
+    .hero-content .hero-subtitle {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.3em;
+        color: rgba(255,255,255,0.9);
+        margin-bottom: 15px;
+        display: block;
+    }
+    .hero-desc {
+        font-size: clamp(1rem, 2vw, 1.25rem);
+        margin: 0 auto 48px;
+        font-weight: 300;
+        letter-spacing: 0.02em;
+        max-width: 600px;
+        color: rgba(255,255,255,0.9);
+        line-height: 1.6;
+    }
+
+    .hero-button {
+        display: inline-block;
+        color: #fff;
+        border: 1px solid rgba(255,255,255,0.3);
+        background: rgba(255,255,255,0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        padding: 20px 48px;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.3em;
+        transition: all 0.4s ease;
+        text-decoration: none;
+    }
+    .hero-button:hover {
+        background: #fff;
+        color: #000;
+        border-color: #fff;
+    }
+
+    @media (max-width: 768px) {
+        .hero-slider { height: 90vh; margin-top: -80px; }
+        .hero-content h1 { font-size: 4rem; }
+    }
 
     /* FEATURED SECTIONS */
     .section-header { text-align: center; margin-bottom: 60px; }
@@ -79,24 +166,39 @@
 
 {% block content %}
 
+{% if banners %}
 <!-- HERO CAROUSEL -->
-<section class="hero-swiper swiper">
-    <div class="swiper-wrapper">
-        {% for banner in banners %}
-        <div class="swiper-slide">
-            <img src="{{ banner.image_url }}" class="hero-img" alt="{{ banner.title }}">
-            <div class="hero-overlay">
-                <div class="hero-content">
-                    <span class="label" style="color: rgba(255,255,255,0.8);">{{ banner.subtitle }}</span>
-                    <h1>{{ banner.title }}</h1>
-                    <a href="{{ banner.link_url or url_for('public.shop') }}" class="btn" style="color: #fff; border-color: #fff;">{{ banner.button_text }}</a>
-                </div>
+<section class="hero-slider">
+    {% for banner in banners %}
+    <div class="hero-slide {% if loop.first %}active{% endif %}">
+        <picture>
+            {% if banner.mobile_image_url %}
+            <source media="(max-width: 768px)" srcset="{{ banner.mobile_image_url or '' }}">
+            {% endif %}
+            <img src="{{ banner.image_url or '' }}" alt="{{ banner.title or 'FULÔ' }}">
+        </picture>
+        <div class="hero-overlay">
+            <div class="hero-content">
+                {% if banner.subtitle %}
+                <span class="hero-subtitle">{{ banner.subtitle or '' }}</span>
+                {% endif %}
+                {% if banner.title %}
+                <h1>{{ banner.title or '' }}</h1>
+                {% endif %}
+                {% if banner.description %}
+                <p class="hero-desc">{{ banner.description or '' }}</p>
+                {% endif %}
+                {% if banner.button_text %}
+                <a href="{{ banner.link_url or url_for('public.shop') }}" class="hero-button">
+                    {{ banner.button_text or 'Ver Coleção' }}
+                </a>
+                {% endif %}
             </div>
         </div>
-        {% endfor %}
     </div>
-    <div class="swiper-pagination"></div>
+    {% endfor %}
 </section>
+{% endif %}
 
 <!-- BRASILIDADE COLLECTION -->
 <section class="container section-padding">
@@ -179,15 +281,23 @@
 {% endblock %}
 
 {% block extra_js %}
-<!-- Swiper JS -->
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
-    const swiper = new Swiper('.hero-swiper', {
-        loop: true,
-        autoplay: { delay: 5000, disableOnInteraction: false },
-        pagination: { el: '.swiper-pagination', clickable: true },
-        effect: 'fade',
-        fadeEffect: { crossFade: true }
+    document.addEventListener('DOMContentLoaded', function() {
+        const slides = document.querySelectorAll('.hero-slide');
+        if (slides.length <= 1) return;
+        
+        let current = 0;
+        
+        const nextSlide = () => {
+            slides[current].classList.remove('active');
+            current = (current + 1) % slides.length;
+            slides[current].classList.add('active');
+        };
+
+        // Auto rotation
+        let slideInterval = setInterval(nextSlide, 5000);
+
+        // Pause on focus/hover if needed, but keeping it simple for now
     });
 </script>
 {% endblock %}

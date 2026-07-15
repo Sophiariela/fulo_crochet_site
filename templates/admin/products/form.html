@@ -2,6 +2,24 @@
 
 {% block title %}{% if product %}Editar Produto{% else %}Novo Produto{% endif %}{% endblock %}
 
+{% block extra_css %}
+<style>
+    .rte-toolbar { display: flex; gap: 4px; margin-bottom: 6px; padding: 6px 8px; background: #f8f9fa; border: 1px solid var(--border); border-bottom: none; border-radius: 4px 4px 0 0; }
+    .rte-toolbar button { background: #fff; border: 1px solid var(--border); border-radius: 3px; padding: 5px 10px; cursor: pointer; font-size: 0.8rem; font-weight: 600; transition: all 0.2s; }
+    .rte-toolbar button:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .rte-editor { border: 1px solid var(--border); border-radius: 0 0 4px 4px; padding: 12px; min-height: 150px; outline: none; font-family: inherit; font-size: 0.9rem; line-height: 1.6; background: #fff; }
+    .rte-editor:focus { border-color: var(--primary); }
+    .rte-editor p { margin-bottom: 8px; }
+    .accordion-section-card { border: 1px solid var(--border); border-radius: 8px; margin-bottom: 20px; overflow: hidden; }
+    .accordion-section-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: #f8f9fa; cursor: pointer; border: none; width: 100%; text-align: left; font-weight: 600; font-size: 0.95rem; color: var(--primary); font-family: inherit; }
+    .accordion-section-header:hover { background: #f0f0f0; }
+    .accordion-section-body { padding: 20px; display: none; }
+    .accordion-section-card.open .accordion-section-body { display: block; }
+    .accordion-section-card.open .accordion-section-header .arrow-icon { transform: rotate(180deg); }
+    .arrow-icon { transition: transform 0.3s; }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="header-actions">
     <h2>{% if product %}Editar: {{ product.name }}{% else %}Novo Produto{% endif %}</h2>
@@ -19,9 +37,62 @@
                 <label>Subtítulo / Chamada Curta</label>
                 <input type="text" name="subtitle" value="{{ product.subtitle if product else '' }}">
             </div>
-            <div class="form-group">
-                <label>Descrição</label>
-                <textarea name="description" rows="5">{{ product.description if product else '' }}</textarea>
+
+            <div class="accordion-section-card open">
+                <button type="button" class="accordion-section-header" onclick="this.parentElement.classList.toggle('open')">
+                    <span>Descrição</span>
+                    <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+                <div class="accordion-section-body">
+                    <div class="rte-toolbar" id="toolbar-description">
+                        <button type="button" onclick="rteCmd('description', 'bold')" title="Negrito"><b>B</b></button>
+                        <button type="button" onclick="rteCmd('description', 'italic')" title="Itálico"><i>I</i></button>
+                        <button type="button" onclick="rteCmd('description', 'underline')" title="Sublinhado"><u>U</u></button>
+                        <button type="button" onclick="rteCmd('description', 'insertUnorderedList')" title="Lista">Lista</button>
+                        <button type="button" onclick="rteCmd('description', 'insertOrderedList')" title="Lista Numerada">1. 2.</button>
+                        <button type="button" onclick="rteCmd('description', 'removeFormat')" title="Limpar">Limpar</button>
+                    </div>
+                    <div class="rte-editor" id="editor-description" contenteditable="true">{{ product.description|safe if product and product.description else '' }}</div>
+                    <input type="hidden" name="description" id="input-description" value="{{ product.description if product else '' }}">
+                </div>
+            </div>
+
+            <div class="accordion-section-card">
+                <button type="button" class="accordion-section-header" onclick="this.parentElement.classList.toggle('open')">
+                    <span>Especificações Técnicas</span>
+                    <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+                <div class="accordion-section-body">
+                    <div class="rte-toolbar" id="toolbar-technical_details">
+                        <button type="button" onclick="rteCmd('technical_details', 'bold')" title="Negrito"><b>B</b></button>
+                        <button type="button" onclick="rteCmd('technical_details', 'italic')" title="Itálico"><i>I</i></button>
+                        <button type="button" onclick="rteCmd('technical_details', 'underline')" title="Sublinhado"><u>U</u></button>
+                        <button type="button" onclick="rteCmd('technical_details', 'insertUnorderedList')" title="Lista">Lista</button>
+                        <button type="button" onclick="rteCmd('technical_details', 'insertOrderedList')" title="Lista Numerada">1. 2.</button>
+                        <button type="button" onclick="rteCmd('technical_details', 'removeFormat')" title="Limpar">Limpar</button>
+                    </div>
+                    <div class="rte-editor" id="editor-technical_details" contenteditable="true">{{ product.technical_details|safe if product and product.technical_details else '' }}</div>
+                    <input type="hidden" name="technical_details" id="input-technical_details" value="{{ product.technical_details if product else '' }}">
+                </div>
+            </div>
+
+            <div class="accordion-section-card">
+                <button type="button" class="accordion-section-header" onclick="this.parentElement.classList.toggle('open')">
+                    <span>Envio & Devolução</span>
+                    <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+                <div class="accordion-section-body">
+                    <div class="rte-toolbar" id="toolbar-shipping_and_returns">
+                        <button type="button" onclick="rteCmd('shipping_and_returns', 'bold')" title="Negrito"><b>B</b></button>
+                        <button type="button" onclick="rteCmd('shipping_and_returns', 'italic')" title="Itálico"><i>I</i></button>
+                        <button type="button" onclick="rteCmd('shipping_and_returns', 'underline')" title="Sublinhado"><u>U</u></button>
+                        <button type="button" onclick="rteCmd('shipping_and_returns', 'insertUnorderedList')" title="Lista">Lista</button>
+                        <button type="button" onclick="rteCmd('shipping_and_returns', 'insertOrderedList')" title="Lista Numerada">1. 2.</button>
+                        <button type="button" onclick="rteCmd('shipping_and_returns', 'removeFormat')" title="Limpar">Limpar</button>
+                    </div>
+                    <div class="rte-editor" id="editor-shipping_and_returns" contenteditable="true">{{ product.shipping_and_returns|safe if product and product.shipping_and_returns else '' }}</div>
+                    <input type="hidden" name="shipping_and_returns" id="input-shipping_and_returns" value="{{ product.shipping_and_returns if product else '' }}">
+                </div>
             </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                 <div class="form-group">
@@ -55,16 +126,22 @@
 	        <label>Tamanhos disponíveis</label>
 
 	     <div>
-   	         <label><input type="checkbox" name="sizes" value="P"> P</label>
-   		 <label><input type="checkbox" name="sizes" value="M"> M</label>
-   		 <label><input type="checkbox" name="sizes" value="G"> G</label>
-    		<label><input type="checkbox" name="sizes" value="GG"> GG</label>
+   	         <label><input type="checkbox" name="sizes" value="P" {% if product and 'P' in (product.sizes or '').split(',') %}checked{% endif %}> P</label>
+   		 <label><input type="checkbox" name="sizes" value="M" {% if product and 'M' in (product.sizes or '').split(',') %}checked{% endif %}> M</label>
+   		 <label><input type="checkbox" name="sizes" value="G" {% if product and 'G' in (product.sizes or '').split(',') %}checked{% endif %}> G</label>
+    		<label><input type="checkbox" name="sizes" value="GG" {% if product and 'GG' in (product.sizes or '').split(',') %}checked{% endif %}> GG</label>
  	     </div>
              </div>
             <div class="form-group">
                 <label>
                     <input type="checkbox" name="is_featured" {% if product and product.is_featured %}checked{% endif %}> 
                     Destaque na Homepage
+                </label>
+            </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="is_accompanied" {% if product and product.is_accompanied %}checked{% endif %}> 
+                    Acompanha (Mostrar na página do produto)
                 </label>
             </div>
         </div>
@@ -92,10 +169,6 @@
                 <label>Imagem 4</label>
                 <input type="file" name="image_4">
             </div>
-            <div class="form-group">
-                <label>Especificações Técnicas (Markdown ou Texto Simples)</label>
-                <textarea name="technical_details" rows="6">{{ product.technical_details if product else '' }}</textarea>
-            </div>	
         </div>
     </div>
 
@@ -103,4 +176,28 @@
         <button type="submit" class="btn btn-primary" style="padding: 15px 40px;">Salvar Produto</button>
     </div>
 </form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function rteCmd(fieldId, command) {
+        document.getElementById('editor-' + fieldId).focus();
+        document.execCommand(command, false, null);
+    }
+
+    function syncEditors() {
+        var fields = ['description', 'technical_details', 'shipping_and_returns'];
+        fields.forEach(function(fieldId) {
+            var editor = document.getElementById('editor-' + fieldId);
+            var input = document.getElementById('input-' + fieldId);
+            if (editor && input) {
+                input.value = editor.innerHTML;
+            }
+        });
+    }
+
+    document.querySelector('form').addEventListener('submit', function() {
+        syncEditors();
+    });
+</script>
 {% endblock %}
