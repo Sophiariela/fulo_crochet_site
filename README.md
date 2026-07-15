@@ -33,9 +33,9 @@ built entirely on Android using Termux.
 
 ## Built on Android
 
-This project was developed entirely on a mobile tablet using
-[Termux](https://termux.dev/), a Linux terminal emulator for Android.
-No laptop. No desktop.
+This project was inittialy developed entirely on a mobile tablet using
+[Termux](https://termux.dev/), a Linux terminal emulator for Android.And finnished on a laptop.
+
 
 
 ---
