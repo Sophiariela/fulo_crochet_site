@@ -2,11 +2,11 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Sucesso | Fulô</title>
+    <title>Pagamento pendente | Fulô</title>
     <style>
         body { font-family: sans-serif; background: #f5f0eb; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
         .box { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 450px; text-align: center; }
-        h1 { color: #27ae60; font-size: 3rem; margin-bottom: 10px; }
+        h1 { color: #d68910; font-size: 3rem; margin-bottom: 10px; }
         h2 { color: #3d2b1f; }
         p { color: #666; line-height: 1.6; }
         .btn-home { display: inline-block; background: #3d2b1f; color: white; text-decoration: none; padding: 12px 24px; border-radius: 8px; margin-top: 20px; }
@@ -14,14 +14,13 @@
 </head>
 <body>
     <div class="box">
-        <h1>✔</h1>
-        <h2>Pedido Recebido!</h2>
+        <h1>⏳</h1>
+        <h2>Pagamento pendente</h2>
         {% if order_id %}
-        <p>Obrigado por comprar na Fulô. Seu pedido <strong>#{{ order_id }}</strong> foi registrado e estamos aguardando a confirmação do pagamento.</p>
+        <p>Seu pedido <strong>#{{ order_id }}</strong> está aguardando a confirmação do pagamento. Você receberá atualizações por email assim que o pagamento for processado.</p>
         {% else %}
-        <p>Obrigado por comprar na Fulô. Seu pagamento foi registrado e estamos aguardando a confirmação.</p>
+        <p>Seu pagamento está aguardando confirmação. Você receberá atualizações por email assim que for processado.</p>
         {% endif %}
-        <p>Você receberá atualizações por email.</p>
         <a href="{{ url_for('public.home') }}" class="btn-home">Voltar para a Loja</a>
     </div>
 </body>

@@ -21,6 +21,17 @@
     </div>
 </div>
 
+{% if not config.PAYMENTS_ENABLED %}
+<div class="card" style="border-left: 4px solid #d68910; display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap;">
+    <div>
+        <div style="font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">Status do Pagamento</div>
+        <div style="font-size: 1.1rem; font-weight: 600; color: var(--primary);">Em homologação</div>
+        <p style="font-size: 0.85rem; color: var(--muted); margin-top: 6px;">Aguardando vinculação da conta oficial do Mercado Pago.</p>
+    </div>
+    <span class="badge" style="background: #fdf3d9; color: #8a6d1a;">Em homologação</span>
+</div>
+{% endif %}
+
 <div class="stats-grid">
     <div class="stat-card">
         <div class="label">Produtos</div>

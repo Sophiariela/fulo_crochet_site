@@ -23,4 +23,9 @@ class Config:
     WEBHOOK_URL = os.getenv('WEBHOOK_URL', 'https://yourdomain.com/checkout/webhook')
     BASE_URL = os.getenv('BASE_URL', 'http://localhost:5000')
 
+    # Enquanto a conta oficial da Fulô no Mercado Pago não estiver vinculada,
+    # o checkout roda em modo homologação/showcase (nenhuma cobrança real é feita).
+    # Defina PAYMENTS_ENABLED=true no ambiente quando as credenciais oficiais entrarem em produção.
+    PAYMENTS_ENABLED = os.getenv('PAYMENTS_ENABLED', 'false').strip().lower() in ('1', 'true', 'yes')
+
     SOCIALS_INSTAGRAM = 'https://www.instagram.com/aster.ops'
